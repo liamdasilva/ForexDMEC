@@ -131,22 +131,22 @@ public class Main {
 				String trend = calcTrend(trendPeriodVal, dataset, columnNum);
 				line += "," + trend;
 			}
-
-			bw.write(line);
+			String prevRowToWrite=line;
+//			bw.write(line);
 
 			while ((line = br.readLine()) != null) {
 
 				String[] row = line.split(cvsSplitBy);
-				dataset.add(new ArrayList<String>(Arrays.asList(row)));
+//				dataset.add(new ArrayList<String>(Arrays.asList(row)));
 				for (int i = 0; i < movingAverages.size(); i++) {
 					Double valueToRemove = Double
-							.parseDouble(dataset.get(dataset.size() - 1 - movingAverages.get(i)).get(columnNum));
+							.parseDouble(dataset.get((dataset.size()-1) - (movingAverages.get(i)-1)).get(columnNum));
 					double movingAvg = calcNextMovingAverage(prevMovingAverageValues.get(i), movingAverages.get(i),
 							new ArrayList<String>(Arrays.asList(row)), columnNum, valueToRemove);
 					line += "," + movingAvg;
 					prevMovingAverageValues.set(i, movingAvg);
 				}
-
+				dataset.add(new ArrayList<String>(Arrays.asList(row)));
 				// calculate remaining trends
 				for (Integer trendPeriodVal : trendPeriods) {
 					String trend = calcTrend(trendPeriodVal, dataset, columnNum);
@@ -168,10 +168,11 @@ public class Main {
 				} else {
 					prevRowClassification = ",RANGING";
 				}
-				bw.write(prevRowClassification + '\n');
-				bw.write(line);
-
-				// rowCounter++;
+//				bw.write(prevRowClassification + '\n');
+//				bw.write(line);
+				prevRowToWrite+=prevRowClassification+'\n';
+				bw.write(prevRowToWrite);
+				prevRowToWrite=line;
 			}
 
 		} catch (FileNotFoundException e) {
