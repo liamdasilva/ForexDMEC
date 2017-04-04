@@ -20,7 +20,7 @@ public class WekaTest {
 //			
 //		}
 		
-		String filename = "EURUSD60edit2.csv";
+		String filename = "data/EURUSD60edit2.csv";
 		String removeString = "";
 		
 		//Utilities.saveToARFF(filename, "EURUSD60edit2.arff");
@@ -45,7 +45,7 @@ public class WekaTest {
 		
 		
 		//classify instances from file using classifier
-		Instances testset = Utilities.datasetFromFile("EURUSD60edit2Testset.csv", "");
+		Instances testset = Utilities.datasetFromFile("data/EURUSD60edit2Testset.csv", "");
 		Utilities.classifyInstances(classifier, testset);
 		
 	}
