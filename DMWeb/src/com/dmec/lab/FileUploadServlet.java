@@ -74,15 +74,21 @@ public class FileUploadServlet extends HttpServlet {
 			//CALL THE CLASSIFICATION
 			String[] strMovingAveragesArray=request.getParameter("movingAverages").split(",");
 			ArrayList<Integer> movingAverages=new ArrayList<Integer>();
-			for(String movingAverage: strMovingAveragesArray){
-				movingAverages.add(Integer.parseInt(movingAverage));
+			if(!request.getParameter("movingAverages").equals("")){
+				for(String movingAverage: strMovingAveragesArray){
+					movingAverages.add(Integer.parseInt(movingAverage));
+				}
 			}
+			
 			
 			String[] strtrendPeriodsArray=request.getParameter("trendPeriods").split(",");
 			ArrayList<Integer> trendPeriods=new ArrayList<Integer>();
-			for(String trendPeriod: strtrendPeriodsArray){
-				trendPeriods.add(Integer.parseInt(trendPeriod));
+			if(!request.getParameter("trendPeriods").equals("")){
+				for(String trendPeriod: strtrendPeriodsArray){
+					trendPeriods.add(Integer.parseInt(trendPeriod));
+				}
 			}
+			
 			
 			int pips=Integer.parseInt(request.getParameter("Pips"));
 			String strCalculateOn=request.getParameter("calculateOn");
