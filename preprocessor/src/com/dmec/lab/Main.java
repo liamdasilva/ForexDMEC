@@ -18,8 +18,8 @@ public class Main {
 		movingAverages.add(10);
 		movingAverages.add(20);
 		ArrayList<Integer> trendPeriods = new ArrayList<Integer>();
-		trendPeriods.add(3);
-		trendPeriods.add(20);
+		trendPeriods.add(5);
+		trendPeriods.add(10);
 		int pips = 10;
 
 		Preprocessor(filepathstr, movingAverages, trendPeriods, pips);
@@ -45,11 +45,11 @@ public class Main {
 		}
 		int counter = 1;
 		while (counter < num - 1) {
-			if (trendDown && Double.parseDouble(dataset.get(dataset.size() - 1 - counter).get(columnNum)) > Double
+			if (trendDown && Double.parseDouble(dataset.get(dataset.size() - 1 - counter).get(columnNum)) >= Double
 					.parseDouble(dataset.get(dataset.size() - 2 - counter).get(columnNum))) {
 				return RANGING;
 			}
-			if (trendUp && Double.parseDouble(dataset.get(dataset.size() - 1 - counter).get(columnNum)) < Double
+			if (trendUp && Double.parseDouble(dataset.get(dataset.size() - 1 - counter).get(columnNum)) <= Double
 					.parseDouble(dataset.get(dataset.size() - 2 - counter).get(columnNum))) {
 				return RANGING;
 			}
@@ -91,6 +91,9 @@ public class Main {
 
 		int NUM_ROWS_TO_STORE = 0;
 		int columnNum = 5;
+		
+		
+		
 
 		// determine how many rows should be store for trend and moving average
 		// calculations
@@ -111,18 +114,45 @@ public class Main {
 			br = new BufferedReader(new FileReader(csvFile));
 			fw = new FileWriter("src/output.csv");
 			bw = new BufferedWriter(fw);
+			
+			//create column headers
+			String columnHeaders="";
+			columnHeaders+="Date,Time,Open,High,Low,Close,Volume";
+			for (Integer movingAverageVal : movingAverages) {
+				columnHeaders+=",Pos_Rel_To_MA_"+movingAverageVal;
+			}
+
+			for (Integer trendPeriodVal : trendPeriods) {
+				columnHeaders+=","+trendPeriodVal+"_Period_Trend";
+			}
+			columnHeaders+=",Class_"+pips+"_pips";
+			bw.write(columnHeaders+'\n');
+			
 			int rowCounter = 0;
+			ArrayList<String> firstRow=new ArrayList<String>();
 			while (rowCounter < NUM_ROWS_TO_STORE && (line = br.readLine()) != null) {
 				String[] row = line.split(cvsSplitBy);
 				dataset.add(new ArrayList<String>(Arrays.asList(row)));
+				firstRow=new ArrayList<String>(Arrays.asList(row));
 				rowCounter++;
 			}
 
 			ArrayList<Double> prevMovingAverageValues = new ArrayList<Double>();
 			// calculate initial moving averages
+			
 			for (Integer movingAverageVal : movingAverages) {
 				double initMovingAvg = calcInitMovingAverage(movingAverageVal, dataset, columnNum);
-				line += "," + initMovingAvg;
+//				
+				String movingAvgVal="";
+				if(Double.parseDouble(firstRow.get(columnNum))>initMovingAvg){
+					movingAvgVal="ABOVE";
+				}else if(Double.parseDouble(firstRow.get(columnNum))<initMovingAvg){
+					movingAvgVal="BELOW";
+				}else{
+					movingAvgVal="EQUAL";
+				}
+//				line += "," + initMovingAvg;
+				line += "," + movingAvgVal;
 				prevMovingAverageValues.add(initMovingAvg);
 			}
 
@@ -137,13 +167,23 @@ public class Main {
 			while ((line = br.readLine()) != null) {
 
 				String[] row = line.split(cvsSplitBy);
+				ArrayList<String> currentRow=new ArrayList<String>(Arrays.asList(row));
 //				dataset.add(new ArrayList<String>(Arrays.asList(row)));
 				for (int i = 0; i < movingAverages.size(); i++) {
 					Double valueToRemove = Double
 							.parseDouble(dataset.get((dataset.size()-1) - (movingAverages.get(i)-1)).get(columnNum));
 					double movingAvg = calcNextMovingAverage(prevMovingAverageValues.get(i), movingAverages.get(i),
 							new ArrayList<String>(Arrays.asList(row)), columnNum, valueToRemove);
-					line += "," + movingAvg;
+					String movingAvgVal="";
+					if(Double.parseDouble(currentRow.get(columnNum))>movingAvg){
+						movingAvgVal="ABOVE";
+					}else if(Double.parseDouble(currentRow.get(columnNum))<movingAvg){
+						movingAvgVal="BELOW";
+					}else{
+						movingAvgVal="EQUAL";
+					}
+//					line += "," + movingAvg;
+					line+=","+movingAvgVal;
 					prevMovingAverageValues.set(i, movingAvg);
 				}
 				dataset.add(new ArrayList<String>(Arrays.asList(row)));
