@@ -11,6 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main {
+	
+	private static final String STR_RANGING="RANGING";
+	private static final String STR_UP_TREND="UPTREND";
+	private static final String STR_DOWN_TREND="DOWNTREND";
+	private static final String STR_ABOVE="ABOVE";
+	private static final String STR_BELOW="BELOW";
+	private static final String STR_EQUAL="EQUAL";
 
 	public static void main(String[] args) {
 		String filepathstr = "/src/EURUSD60.csv";
@@ -30,9 +37,7 @@ public class Main {
 	public static String calcTrend(int num, ArrayList<ArrayList<String>> dataset, int columnNum) {
 		boolean trendUp = false;
 		boolean trendDown = false;
-		String RANGING = "RANGING";
-		String TRENDUP = "TRENDUP";
-		String TRENDDOWN = "TRENDDOWN";
+		
 
 		if (Double.parseDouble(dataset.get(dataset.size() - 1).get(columnNum)) > Double
 				.parseDouble(dataset.get(dataset.size() - 2).get(columnNum))) {
@@ -41,25 +46,25 @@ public class Main {
 				.parseDouble(dataset.get(dataset.size() - 2).get(columnNum))) {
 			trendDown = true;
 		} else {
-			return RANGING;
+			return STR_RANGING;
 		}
 		int counter = 1;
 		while (counter < num - 1) {
 			if (trendDown && Double.parseDouble(dataset.get(dataset.size() - 1 - counter).get(columnNum)) >= Double
 					.parseDouble(dataset.get(dataset.size() - 2 - counter).get(columnNum))) {
-				return RANGING;
+				return STR_RANGING;
 			}
 			if (trendUp && Double.parseDouble(dataset.get(dataset.size() - 1 - counter).get(columnNum)) <= Double
 					.parseDouble(dataset.get(dataset.size() - 2 - counter).get(columnNum))) {
-				return RANGING;
+				return STR_RANGING;
 			}
 			counter++;
 		}
 		if (trendUp)
-			return TRENDUP;
+			return STR_UP_TREND;
 		if (trendDown)
-			return TRENDDOWN;
-		return RANGING;
+			return STR_DOWN_TREND;
+		return STR_RANGING;
 
 	}
 
@@ -145,11 +150,11 @@ public class Main {
 //				
 				String movingAvgVal="";
 				if(Double.parseDouble(firstRow.get(columnNum))>initMovingAvg){
-					movingAvgVal="ABOVE";
+					movingAvgVal=STR_ABOVE;
 				}else if(Double.parseDouble(firstRow.get(columnNum))<initMovingAvg){
-					movingAvgVal="BELOW";
+					movingAvgVal=STR_BELOW;
 				}else{
-					movingAvgVal="EQUAL";
+					movingAvgVal=STR_EQUAL;
 				}
 //				line += "," + initMovingAvg;
 				line += "," + movingAvgVal;
@@ -176,11 +181,11 @@ public class Main {
 							new ArrayList<String>(Arrays.asList(row)), columnNum, valueToRemove);
 					String movingAvgVal="";
 					if(Double.parseDouble(currentRow.get(columnNum))>movingAvg){
-						movingAvgVal="ABOVE";
+						movingAvgVal=STR_ABOVE;
 					}else if(Double.parseDouble(currentRow.get(columnNum))<movingAvg){
-						movingAvgVal="BELOW";
+						movingAvgVal=STR_BELOW;
 					}else{
-						movingAvgVal="EQUAL";
+						movingAvgVal=STR_EQUAL;
 					}
 //					line += "," + movingAvg;
 					line+=","+movingAvgVal;
@@ -206,7 +211,7 @@ public class Main {
 					prevRowClassification = "," + "-" + pips + "pips";
 
 				} else {
-					prevRowClassification = ",RANGING";
+					prevRowClassification = ","+STR_RANGING;
 				}
 //				bw.write(prevRowClassification + '\n');
 //				bw.write(line);
