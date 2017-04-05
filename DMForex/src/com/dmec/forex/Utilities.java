@@ -26,22 +26,22 @@ public class Utilities {
 	/**
 	 * @param filename
 	 * 	the path of the csv or arff file to read
-	 * @param removeString
-	 * 	the columns to remove, should be of the form: "-R 1,7,9-12"
+	 * @param removeStringArray
+	 * 	the columns to remove, should be of the form: "-R,1,7,9-12"
 	 * @return the (Instances) dataset created from the file
 	 * 
 	 */
-	public static Instances datasetFromFile(String filename, String removeString){
+	public static Instances datasetFromFile(String filename, String []removeStringArray){
 		CSVLoader loader = new CSVLoader();
 		try {
 			loader.setSource(new File(filename)); //example of filename: "eurusd60edit2.csv"
 			Instances dataset = loader.getDataSet();
 			
 			//remove columns here
-			if (!removeString.equals("")){
-				String[] opts = new String[]{removeString}; //example of removeString: "-R 1,7,9-12"
+			if (removeStringArray.length!=0){
+//				String[] opts = new String[]{"-R","3-7"}; //example of removeString: "-R 1,7,9-12"
 				Remove remove = new Remove();
-				remove.setOptions(opts);
+				remove.setOptions(removeStringArray);
 				remove.setInputFormat(dataset);
 				Instances newdataset = Filter.useFilter(dataset, remove);
 				newdataset.setClassIndex(newdataset.numAttributes()-1);

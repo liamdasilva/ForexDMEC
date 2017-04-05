@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -20,9 +22,17 @@ import javax.servlet.http.Part;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
+import com.dmec.forex.mySBStateful;
+import com.dmec.forex.mySBStateless;
+
 @WebServlet("/upload")
 @MultipartConfig
 public class FileUploadServlet extends HttpServlet {
+    @EJB
+    private mySBStateful sbsf;
+    @EJB
+    private mySBStateless sbsl;
+//    private final static String []removeStringArray=new String[]{"1,3-7"};
 	private final static Logger LOGGER = Logger.getLogger(FileUploadServlet.class.getCanonicalName());
 
 	@SuppressWarnings("deprecation")
@@ -54,6 +64,48 @@ public class FileUploadServlet extends HttpServlet {
 			writer.println("New file " + fileName + " created at " + path + File.separator + "input");
 			LOGGER.log(Level.INFO, "File {0} being uploaded to {1} ",
 					new Object[] { fileName, path + File.separator + "input" });
+			
+			//CALL THE CLASSIFICATION
+			String[] strMovingAveragesArray=request.getParameter("movingAverages").split(",");
+			ArrayList<Integer> movingAverages=new ArrayList<Integer>();
+			for(String movingAverage: strMovingAveragesArray){
+				movingAverages.add(Integer.parseInt(movingAverage));
+			}
+			
+			String[] strtrendPeriodsArray=request.getParameter("trendPeriods").split(",");
+			ArrayList<Integer> trendPeriods=new ArrayList<Integer>();
+			for(String trendPeriod: strtrendPeriodsArray){
+				trendPeriods.add(Integer.parseInt(trendPeriod));
+			}
+			
+			int pips=Integer.parseInt(request.getParameter("Pips"));
+			String strCalculateOn=request.getParameter("calculateOn");
+			int columnNum=0;
+			if(strCalculateOn.equals("open")){
+				columnNum=2;
+			}else if(strCalculateOn.equals("high")){
+				columnNum=3;
+			}else if(strCalculateOn.equals("low")){
+				columnNum=4;
+			}else if(strCalculateOn.equals("close")){
+				columnNum=5;
+			}
+			
+			System.out.println(request.getParameter("movingAverages")+
+			request.getParameter("trendPeriods")+
+			request.getParameter("Pips")+
+			request.getParameter("baseCurrency")+
+			request.getParameter("quoteCurrency")+
+			request.getParameter("calculateOn"));
+			String inputFileWithPath=path+"/input/"+fileName;
+			String outputFileWithPath=path+"/output/"+"preprocessed_"+fileName;
+			System.out.println(outputFileWithPath);
+			String []removeStringArray = new String[]{"-R","1,3-7"};
+			
+			
+//			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
+			sbsl.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
+			
 		} catch (FileNotFoundException fne) {
 			writer.println("You either did not specify a file to upload or are "
 					+ "trying to upload a file to a protected or nonexistent " + "location.");
@@ -71,8 +123,7 @@ public class FileUploadServlet extends HttpServlet {
 				writer.close();
 			}
 		}
-		doPreProcessing (filename)
-		response.
+		
 	}
 
 	private String getFileName(final Part part) {

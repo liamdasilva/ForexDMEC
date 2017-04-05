@@ -28,8 +28,9 @@ public class Main {
 		trendPeriods.add(5);
 		trendPeriods.add(10);
 		int pips = 10;
+		int columnNum=5;
 
-		Preprocessor(filepathstr, movingAverages, trendPeriods, pips);
+		Preprocessor(filepathstr, movingAverages, trendPeriods, pips, columnNum);
 		// TODO Auto-generated method stub
 
 	}
@@ -84,7 +85,7 @@ public class Main {
 	}
 
 	public static void Preprocessor(String filepathstr, ArrayList<Integer> movingAverages,
-			ArrayList<Integer> trendPeriods, int pips) {
+			ArrayList<Integer> trendPeriods, int pips, int columnNum) {
 		String csvFile = "src/EURUSD60.csv";
 		BufferedReader br = null;
 		String line = "";
@@ -95,7 +96,7 @@ public class Main {
 		ArrayList<ArrayList<String>> dataset = new ArrayList();
 
 		int NUM_ROWS_TO_STORE = 0;
-		int columnNum = 5;
+//		int columnNum = 5;
 		
 		
 		
