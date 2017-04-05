@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +23,11 @@ import javax.servlet.http.Part;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
+import com.dmec.forex.mySBSingleton;
 import com.dmec.forex.mySBStateful;
 import com.dmec.forex.mySBStateless;
+
+import weka.classifiers.Classifier;
 
 @WebServlet("/upload")
 @MultipartConfig
@@ -32,6 +36,8 @@ public class FileUploadServlet extends HttpServlet {
     private mySBStateful sbsf;
     @EJB
     private mySBStateless sbsl;
+    @EJB
+    private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};
 	private final static Logger LOGGER = Logger.getLogger(FileUploadServlet.class.getCanonicalName());
 
@@ -104,8 +110,14 @@ public class FileUploadServlet extends HttpServlet {
 			
 			
 //			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
-			sbsl.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
+			Classifier classifier=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum);
 			
+			String evaluation=sbst.evaluateClassifier(classifier, outputFileWithPath, new String[]{"-R","1,3-7"});
+			sbst.temporarilyStoreClassifier(classifier);
+			request.setAttribute("evaluation", evaluation);
+			RequestDispatcher rd=request.getRequestDispatcher("confirmClassifier.jsp");
+			rd.forward(request, response);
+						
 		} catch (FileNotFoundException fne) {
 			writer.println("You either did not specify a file to upload or are "
 					+ "trying to upload a file to a protected or nonexistent " + "location.");

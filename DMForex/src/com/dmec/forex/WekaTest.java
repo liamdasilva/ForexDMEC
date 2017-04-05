@@ -1,18 +1,10 @@
 package com.dmec.forex;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
-import weka.classifiers.trees.J48;
-import weka.core.Instance;
-import weka.core.Instances;
-import weka.core.converters.ArffSaver;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.Remove;
-import weka.core.converters.CSVLoader;
+
 
 public class WekaTest {
 
@@ -63,8 +55,9 @@ public class WekaTest {
 		Integer pips=10;
 		Integer columnNum=5;		
 		
-		Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
-		
-	}
+		Classifier classifier=Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum);
+//		System.out.println(Arrays.toString(removeStringArray));
+		System.out.println(Classification.evaluateClassifier(classifier,outputFileWithPath, new String[]{"-R","1,3-7"}));
+		}
 
 }
