@@ -71,9 +71,7 @@ public class FileUploadServlet extends HttpServlet {
 				writer.close();
 			}
 		}
-		doPreProcessing (filename)
-		response.
-	}
+}
 
 	private String getFileName(final Part part) {
 		final String partHeader = part.getHeader("content-disposition");
