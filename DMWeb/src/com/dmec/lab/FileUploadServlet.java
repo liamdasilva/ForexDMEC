@@ -123,8 +123,12 @@ public class FileUploadServlet extends HttpServlet {
 				writer.close();
 			}
 		}
+<<<<<<< HEAD
 		
 	}
+=======
+}
+>>>>>>> 5e748accd388a215346db3baeca41b19d8045dd7
 
 	private String getFileName(final Part part) {
 		final String partHeader = part.getHeader("content-disposition");
