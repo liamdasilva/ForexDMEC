@@ -33,8 +33,10 @@ tr:nth-child(even) {
 
 	<%
 	ArrayList<ArrayList<String>> results=(ArrayList<ArrayList<String>>) request.getAttribute("results");
-	out.println("Here is the classification of the last/only row from the test data that was provided: "+results.get(results.size()-1).get(1)+"<br>");
+	out.println("Here is the classification of the last/only row from the test data that was provided(prediction): "+results.get(results.size()-1).get(1)+"<br>");
 	int counter=0;
+	int correctlyClassifiedNonRangingInstances=0;
+	int totalNonRangingClassifications=0;
 	String table="";
 	table+="<table>";
 	/* out.println("<table>"); */
@@ -43,6 +45,13 @@ tr:nth-child(even) {
 			table+="<tr>";
 			if(results.get(i).get(0).equals(results.get(i).get(1))){
 				counter++;
+			}
+			
+			if(i!=0&&i!=(results.size()-1)&&!results.get(i).get(1).equals("RANGING")){
+				if(results.get(i).get(0).equals(results.get(i).get(1))){
+					correctlyClassifiedNonRangingInstances++;
+				}
+				totalNonRangingClassifications++;
 			}
 			for(int j=0;j<results.get(i).size();j++){
 				if(i==0){
@@ -62,9 +71,10 @@ tr:nth-child(even) {
 	
 	/* out.println("</table>"); */
 	table+="</table>";
+	out.println(correctlyClassifiedNonRangingInstances+"/"+totalNonRangingClassifications+" successful trading opportunities were captured in the test data set<br>");
 	Double accuracy=(double)counter/(double)(results.size());
-	out.println("Correctly classified instances (from test data): "+accuracy*100+"%"+"<br>");
-	out.println("Here are the classification results of the rest of test data that was uploaded:<br>");
+	out.println("Total correctly classified instances (from test data): "+accuracy*100+"%"+"<br>");
+	out.println("Here are the classification results of the test data:<br>");
 	out.println(table);
 	
 	%>
