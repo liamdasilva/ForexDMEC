@@ -23,6 +23,7 @@ import javax.servlet.http.Part;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
+import com.dmec.forex.ClassifierMaster;
 import com.dmec.forex.mySBSingleton;
 import com.dmec.forex.mySBStateful;
 import com.dmec.forex.mySBStateless;
@@ -116,10 +117,10 @@ public class TrainFileUploadServlet extends HttpServlet {
 			
 			
 //			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
-			Classifier classifier=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum);
+			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum);
 			
-			String evaluation=sbst.evaluateClassifier(classifier, outputFileWithPath, new String[]{"-R","1,3-7"});
-			sbst.temporarilyStoreClassifier(classifier);
+			String evaluation=sbst.evaluateClassifier(classifierMaster.getClassifier(), outputFileWithPath, new String[]{"-R","1,3-7"});
+			sbst.temporarilyStoreClassifierMaster(classifierMaster);
 			request.setAttribute("evaluation", evaluation);
 			RequestDispatcher rd=request.getRequestDispatcher("confirmClassifier.jsp");
 			rd.forward(request, response);
