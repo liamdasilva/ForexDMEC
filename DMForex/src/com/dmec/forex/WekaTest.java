@@ -46,10 +46,10 @@ public class WekaTest {
 //		
 //		//new function callClassifier
 ////		removeString = "-R 3-7";
-		String inputFileWithPath="data/EURUSD60.csv";
+		String inputFileWithPath="data/liamEURUSD15.csv";
 		String outputFileWithPath="data/output/output.csv";
-		String testInputFileWithPath="data/EURUSD60edit2Testset.csv";
-		String testOutputFileWithPath="data/output/EURUSD60edit2Testset.csv";
+		String testInputFileWithPath="data/liamEURUSD15.csv";
+		String testOutputFileWithPath="data/output/preprocessed_liamEURUSD15.csvEURUSD60edit2Testset.csv";
 		ArrayList<Integer> movingAverages=new ArrayList<Integer>();
 		movingAverages.add(20);
 

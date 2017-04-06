@@ -138,7 +138,16 @@ public class Preprocessor {
 			}
 				
 			while (rowCounter < NUM_ROWS_TO_STORE && (line = br.readLine()) != null) {
+//				System.out.println(line);
 				String[] row = line.split(cvsSplitBy);
+				String time=row[1];
+				int index=row[1].indexOf(":");
+				time=time.substring(0, index+1)+"00";	
+				row[1]=time;
+				line = Arrays.toString(row);
+				line=line.substring(1,line.length()-1);
+				line=line.replaceAll("\\s+", "");
+//				System.out.println(line);
 				dataset.add(new ArrayList<String>(Arrays.asList(row)));
 				firstRow=new ArrayList<String>(Arrays.asList(row));
 				prevRowClose=Double.parseDouble(firstRow.get(columnNum));
@@ -173,8 +182,16 @@ public class Preprocessor {
 //			bw.write(line);
 
 			while ((line = br.readLine()) != null) {
-
+//				System.out.println(line);
 				String[] row = line.split(cvsSplitBy);
+				String time=row[1];
+				int index=row[1].indexOf(":");
+				time=time.substring(0, index+1)+"00";	
+				row[1]=time;
+				line = Arrays.toString(row);
+				line=line.substring(1,line.length()-1);
+				line=line.replaceAll("\\s+", "");
+//				System.out.println(line);
 				ArrayList<String> currentRow=new ArrayList<String>(Arrays.asList(row));
 				
 //				dataset.add(new ArrayList<String>(Arrays.asList(row)));
