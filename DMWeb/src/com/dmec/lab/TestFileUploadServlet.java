@@ -33,9 +33,9 @@ import com.dmec.forex.mySBStateless;
 
 import weka.classifiers.Classifier;
 
-@WebServlet("/upload")
+@WebServlet("/uploadTest")
 @MultipartConfig
-public class FileUploadServlet extends HttpServlet {
+public class TestFileUploadServlet extends HttpServlet {
     @EJB
     private mySBStateful sbsf;
     @EJB
@@ -43,7 +43,7 @@ public class FileUploadServlet extends HttpServlet {
     @EJB
     private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};
-	private final static Logger LOGGER = Logger.getLogger(FileUploadServlet.class.getCanonicalName());
+	private final static Logger LOGGER = Logger.getLogger(TestFileUploadServlet.class.getCanonicalName());
 
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
