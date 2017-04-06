@@ -11,6 +11,8 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -23,8 +25,10 @@ import javax.servlet.http.Part;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
+import com.dmec.forex.ClassifierMaster;
 import com.dmec.forex.mySBSingleton;
 import com.dmec.forex.mySBStateful;
+import com.dmec.forex.mySBStatefulRemote;
 import com.dmec.forex.mySBStateless;
 
 import weka.classifiers.Classifier;
@@ -44,6 +48,9 @@ public class FileUploadServlet extends HttpServlet {
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+
+		 
 		response.setContentType("text/html;charset=UTF-8");
 
 		// Create path components to save the file
@@ -92,15 +99,15 @@ public class FileUploadServlet extends HttpServlet {
 			
 			int pips=Integer.parseInt(request.getParameter("Pips"));
 			String strCalculateOn=request.getParameter("calculateOn");
-			int columnNum=0;
+			int OLHC_ColumnNum=0;
 			if(strCalculateOn.equals("open")){
-				columnNum=2;
+				OLHC_ColumnNum=2;
 			}else if(strCalculateOn.equals("high")){
-				columnNum=3;
+				OLHC_ColumnNum=3;
 			}else if(strCalculateOn.equals("low")){
-				columnNum=4;
+				OLHC_ColumnNum=4;
 			}else if(strCalculateOn.equals("close")){
-				columnNum=5;
+				OLHC_ColumnNum=5;
 			}
 			
 			System.out.println(request.getParameter("movingAverages")+
@@ -116,10 +123,10 @@ public class FileUploadServlet extends HttpServlet {
 			
 			
 //			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
-			Classifier classifier=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum);
+			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, OLHC_ColumnNum);
 			
-			String evaluation=sbst.evaluateClassifier(classifier, outputFileWithPath, new String[]{"-R","1,3-7"});
-			sbst.temporarilyStoreClassifier(classifier);
+			String evaluation=sbst.evaluateClassifier(classifierMaster.getClassifier(), outputFileWithPath, new String[]{"-R","1,3-7"});
+			sbst.temporarilyStoreClassifierMaster(classifierMaster);
 			request.setAttribute("evaluation", evaluation);
 			RequestDispatcher rd=request.getRequestDispatcher("confirmClassifier.jsp");
 			rd.forward(request, response);

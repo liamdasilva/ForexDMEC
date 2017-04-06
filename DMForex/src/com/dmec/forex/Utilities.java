@@ -123,17 +123,56 @@ public class Utilities {
 		}
 	}
 	
-	public static void classifyInstances(Classifier classifier, Instances testset) throws Exception{
-		System.out.println("\nTesting with Testset:");
-		System.out.println("Actual:\t\tClassified As:");
+	public static boolean saveToARFF(Instances dataset, String outfile){
+		try {
+//			DataSource source = new DataSource(filename);
+//			Instances dataset = source.getDataSet();
+			ArffSaver saver = new ArffSaver();
+			saver.setInstances(dataset);
+			saver.setFile(new File(outfile));
+			saver.writeBatch();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public static String classifyInstances(Classifier classifier, Instances testset) throws Exception{
+		String result="";
+//		System.out.println(testset);
+//		System.out.println("\nTesting with Testset:");
+		result+="Testing with Testset:\n";
+//		System.out.println("Actual:\t\tClassified As:");
+		result+="Actual:\t\tClassified As:\n";
+		int counter=0;
 		for(int i=0;i<testset.numInstances();i++){
 			Instance row = testset.instance(i);
+//			System.out.println(row);
 			double c = classifier.classifyInstance(row);
-			System.out.println(testset.classAttribute().value((int) row.classValue())
-					+"\t\t"
-					+testset.classAttribute().value((int) c));
+			
+			
+//			System.out.println(c);
+			if(i==testset.numInstances()-1){
+				result+="Here is the prediction for the close of the next candle:\n";
+//				System.out.println("Here is the prediction for the close of the next candle:");
+				result+=testset.classAttribute().value((int) c)+"\n";
+			}else{
+				result+=testset.classAttribute().value((int) row.classValue())
+						+"\t\t"
+						+testset.classAttribute().value((int) c)+"\n";
+//				System.out.println(testset.classAttribute().value((int) row.classValue())
+//						+"\t\t"
+//						+testset.classAttribute().value((int) c));
+			}
+			if((testset.classAttribute().value((int) row.classValue())).equals(testset.classAttribute().value((int) c))){
+				counter++;
+			}
+			
 			
 		}
+		System.out.println((double)counter/(double)testset.numInstances());
+		return result;
 	}
 	
 	/**

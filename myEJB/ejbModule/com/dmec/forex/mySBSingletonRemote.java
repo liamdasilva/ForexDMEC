@@ -8,12 +8,11 @@ import weka.classifiers.Classifier;
 
 @Remote
 public interface mySBSingletonRemote {
-	public Classifier createClassificationTree(String inputFileWithPath, String outputFileWithPath, String [] removeStringArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips, int columnNum);
 	
-	public String evaluateClassifier(Classifier classifier, String outputFileWithPath,String [] removeStringArray);
-	public boolean saveClassifier(String outputFileWithPath);
-	public Classifier getClassifier(String classifierName, String filePath);
-	public void temporarilyStoreClassifier(Classifier classifier);
+	public ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips, int OLHC_ColumnNum);
+	public String evaluateClassifier(Classifier classifier, String outputFileWithPath,String [] columnIndicesToRemoveArray);
+	public boolean saveClassifierMaster(String outputFileWithPath);
+	public ClassifierMaster getClassifierMaster(String classifierName, String filePath);
+	public void temporarilyStoreClassifierMaster(ClassifierMaster classifierMaster);
 		
-	
 }

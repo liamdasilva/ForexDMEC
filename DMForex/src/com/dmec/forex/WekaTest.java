@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import weka.classifiers.Classifier;
+import weka.core.Instances;
 
 
 public class WekaTest {
@@ -14,7 +15,9 @@ public class WekaTest {
 //		}
 		
 		String filename = "data/EURUSD60.csv";
-		String []removeStringArray = new String[]{"-R","1,3-7"};
+		String []columnIndicesToRemoveArray = new String[]{"-R","1,3-7"};
+//		String []removeStringArray2 = new String[]{"-R","1,3-7"};
+
 		
 //		//Utilities.saveToARFF(filename, "EURUSD60edit2.arff");
 //		
@@ -45,19 +48,29 @@ public class WekaTest {
 ////		removeString = "-R 3-7";
 		String inputFileWithPath="data/EURUSD60.csv";
 		String outputFileWithPath="data/output/output.csv";
+		String testInputFileWithPath="data/EURUSD60edit2Testset.csv";
+		String testOutputFileWithPath="data/output/EURUSD60edit2Testset.csv";
 		ArrayList<Integer> movingAverages=new ArrayList<Integer>();
-		movingAverages.add(10);
 		movingAverages.add(20);
 
+		movingAverages.add(50);
+		movingAverages.add(100);
+
 		ArrayList<Integer> trendPeriods=new ArrayList<Integer>();
-		trendPeriods.add(10);
-		trendPeriods.add(20);
+//		trendPeriods.add(100);
+//		trendPeriods.add(200);
 		Integer pips=10;
 		Integer columnNum=5;		
 		
-		Classifier classifier=Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum);
+		ClassifierMaster cmObject=Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum,false);
 //		System.out.println(Arrays.toString(removeStringArray));
-		System.out.println(Classification.evaluateClassifier(classifier,outputFileWithPath, new String[]{"-R","1,3-7"}));
-		}
+//		System.out.println(Classification.evaluateClassifier(cmObject,outputFileWithPath, new String[]{"-R","1,3-7"}));
+		System.out.println(Classification.classifyData(cmObject.getClassifier(), testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray,movingAverages, trendPeriods, pips,
+				columnNum,cmObject.getInstances()));
+	
+
+		
+
+	}
 
 }

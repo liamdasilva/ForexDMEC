@@ -67,9 +67,13 @@ public class Preprocessor {
 		}
 		return sum / num;
 	}
+	
+	public static void preprocessTestData(){
+		
+	}
 
 	public static void startPreprocessing(String inputFileName, String outputFileName, ArrayList<Integer> movingAverages,
-			ArrayList<Integer> trendPeriods, int pips, int columnNum) {
+			ArrayList<Integer> trendPeriods, int pips, int columnNum, boolean testData) {
 //		String csvFile = "src/EURUSD60.csv";
 		BufferedReader br = null;
 		String line = "";
@@ -217,6 +221,9 @@ public class Preprocessor {
 				bw.write(prevRowToWrite);
 				prevRowToWrite=line;
 				prevRowClose=currentRowClose;
+			}
+			if(testData){
+				bw.write(prevRowToWrite+",?");
 			}
 
 		} catch (FileNotFoundException e) {

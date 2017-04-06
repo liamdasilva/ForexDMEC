@@ -14,7 +14,7 @@ import weka.classifiers.Classifier;
 @LocalBean
 public class mySBStateful implements mySBStatefulRemote {
 	
-	Classifier tempClassifier;
+	ClassifierMaster tempClassifierMaster;
 	
     /**
      * Default constructor. 
@@ -23,34 +23,34 @@ public class mySBStateful implements mySBStatefulRemote {
         // TODO Auto-generated constructor stub
     }
 
-	@Override
-	public Classifier createClassificationTree(String inputFileWithPath, String outputFileWithPath,
-			String[] removeStringArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
-			int columnNum) {
-		return Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
+    @Override
+	public ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath,
+			String[] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
+			int OLHC_ColumnNum) {
+		return Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, false);
 
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
-	public String evaluateClassifier(Classifier classifier, String outputFileWithPath,String [] removeStringArray){
-		return Classification.evaluateClassifier(classifier, outputFileWithPath, removeStringArray);
+	public String evaluateClassifier(Classifier classifier, String outputFileWithPath,String [] columnIndicesToRemoveArray){
+		return Classification.evaluateClassifier(classifier, outputFileWithPath, columnIndicesToRemoveArray);
 	}
 
 	@Override
-	public boolean saveClassifier(String outputFileWithPath) {
-		return Classification.saveClassifier(this.tempClassifier, outputFileWithPath);
+	public boolean saveClassifierMaster(String outputFileWithPath) {
+		return Classification.saveClassifierMaster(this.tempClassifierMaster, outputFileWithPath);
 	}
 
 	@Override
-	public Classifier getClassifier(String classifierName, String filePath) {
-		return Classification.getClassifier(classifierName, filePath);
+	public ClassifierMaster getClassifierMaster(String classifierMasterName, String filePath) {
+		return Classification.getClassifierMaster(classifierMasterName, filePath);
 	}
 
 	@Override
-	public void temporarilyStoreClassifier(Classifier classifier) {
-		this.tempClassifier=classifier;
+	public void temporarilyStoreClassifierMaster(ClassifierMaster classifierMaster) {
+		this.tempClassifierMaster=classifierMaster;
 	}
 	
 	

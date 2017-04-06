@@ -53,7 +53,7 @@ public class ConfirmClassifierServlet extends HttpServlet {
 		String fileName=request.getParameter("fileName");
 		if(selection.equals("Yes")){
 			final String path = this.getServletContext().getRealPath("/WEB-INF/");
-			boolean saveSuccessful=sbst.saveClassifier(path+"/output/"+fileName);
+			boolean saveSuccessful=sbst.saveClassifierMaster(path+"/output/"+fileName);
 			if(saveSuccessful){
 				request.setAttribute("saveConfirmationMessage", "Classifier was successfully saved");
 
