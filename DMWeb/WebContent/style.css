@@ -2,7 +2,7 @@
 
 body {
 	background-color: #f0f0f0;
-	font-family: "Raleway-Regular", Raleway, serif;	
+	font-family: "Raleway-Regular", Raleway, sans-serif;	
 }
 h1 {
     color: black;
@@ -11,7 +11,7 @@ h1 {
 body{
     max-width: 500px;
     padding: 20px 12px 10px 20px;
-    font: 13px Raleway-Regular, "Raleway", serif;
+    font: 13px Raleway-Regular, "Raleway", sans-serif;
 }
 form.heading{
     font-weight: bold;
