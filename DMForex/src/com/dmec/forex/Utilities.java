@@ -2,6 +2,7 @@ package com.dmec.forex;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -138,29 +139,39 @@ public class Utilities {
 		}
 	}
 	
-	public static String classifyInstances(Classifier classifier, Instances testset) throws Exception{
+	public static ArrayList<ArrayList<String>> classifyInstances(Classifier classifier, Instances testset,String newLineStr) throws Exception{
 		String result="";
+		ArrayList<ArrayList<String>> results=new ArrayList<ArrayList<String>>();
 //		System.out.println(testset);
 //		System.out.println("\nTesting with Testset:");
-		result+="Testing with Testset:\n";
+		result+="Testing with Testset:"+newLineStr;
 //		System.out.println("Actual:\t\tClassified As:");
-		result+="Actual:\t\tClassified As:\n";
+		result+="Actual:		Classified As:"+newLineStr;
+		ArrayList<String> rowInResults=new ArrayList<String>();
+		rowInResults.add("Actual");
+		rowInResults.add("Classified As");
+		results.add(rowInResults);
 		int counter=0;
 		for(int i=0;i<testset.numInstances();i++){
 			Instance row = testset.instance(i);
 //			System.out.println(row);
 			double c = classifier.classifyInstance(row);
-			
+			rowInResults=new ArrayList<String>();
 			
 //			System.out.println(c);
 			if(i==testset.numInstances()-1){
-				result+="Here is the prediction for the close of the next candle:\n";
+				rowInResults.add("Here is the prediction for the close of the next candle:");
+				rowInResults.add(testset.classAttribute().value((int) c));
+				result+="Here is the prediction for the close of the next candle:"+newLineStr;
 //				System.out.println("Here is the prediction for the close of the next candle:");
-				result+=testset.classAttribute().value((int) c)+"\n";
+				result+=testset.classAttribute().value((int) c)+newLineStr;
 			}else{
+				rowInResults.add(testset.classAttribute().value((int) row.classValue()));
+				rowInResults.add(testset.classAttribute().value((int) c));
+				
 				result+=testset.classAttribute().value((int) row.classValue())
-						+"\t\t"
-						+testset.classAttribute().value((int) c)+"\n";
+						+"		"
+						+testset.classAttribute().value((int) c)+newLineStr;
 //				System.out.println(testset.classAttribute().value((int) row.classValue())
 //						+"\t\t"
 //						+testset.classAttribute().value((int) c));
@@ -168,11 +179,11 @@ public class Utilities {
 			if((testset.classAttribute().value((int) row.classValue())).equals(testset.classAttribute().value((int) c))){
 				counter++;
 			}
-			
+			results.add(rowInResults);
 			
 		}
 		System.out.println((double)counter/(double)testset.numInstances());
-		return result;
+		return results;
 	}
 	
 	/**

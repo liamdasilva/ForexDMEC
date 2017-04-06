@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
@@ -32,6 +33,7 @@ import com.dmec.forex.mySBStatefulRemote;
 import com.dmec.forex.mySBStateless;
 
 import weka.classifiers.Classifier;
+import weka.core.Instances;
 
 @WebServlet("/uploadTest")
 @MultipartConfig
@@ -77,62 +79,32 @@ public class TestFileUploadServlet extends HttpServlet {
 			writer.println("New file " + fileName + " created at " + path + File.separator + "input");
 			LOGGER.log(Level.INFO, "File {0} being uploaded to {1} ",
 					new Object[] { fileName, path + File.separator + "input" });
-			
-			//CALL THE CLASSIFICATION
-			String[] strMovingAveragesArray=request.getParameter("movingAverages").split(",");
-			ArrayList<Integer> movingAverages=new ArrayList<Integer>();
-			if(!request.getParameter("movingAverages").equals("")){
-				for(String movingAverage: strMovingAveragesArray){
-					movingAverages.add(Integer.parseInt(movingAverage));
-				}
-			}
-			
-			
-			String[] strtrendPeriodsArray=request.getParameter("trendPeriods").split(",");
-			ArrayList<Integer> trendPeriods=new ArrayList<Integer>();
-			if(!request.getParameter("trendPeriods").equals("")){
-				for(String trendPeriod: strtrendPeriodsArray){
-					trendPeriods.add(Integer.parseInt(trendPeriod));
-				}
-			}
-			
-			
-			int pips=Integer.parseInt(request.getParameter("Pips"));
-			String strCalculateOn=request.getParameter("calculateOn");
-			int OLHC_ColumnNum=0;
-			if(strCalculateOn.equals("open")){
-				OLHC_ColumnNum=2;
-			}else if(strCalculateOn.equals("high")){
-				OLHC_ColumnNum=3;
-			}else if(strCalculateOn.equals("low")){
-				OLHC_ColumnNum=4;
-			}else if(strCalculateOn.equals("close")){
-				OLHC_ColumnNum=5;
-			}
-			
-			String baseCurr=request.getParameter("baseCurrency");
-			String quoteCurr=request.getParameter("quoteCurrency");
+			String objectName=request.getParameter("objectName");
+			System.out.println(objectName);
 
+			ClassifierMaster classifierMaster=sbst.getClassifierMaster(objectName, path+"/output/");
+			Classifier classifier=classifierMaster.getClassifier();
+			String testInputFileWithPath=path+"/input/"+fileName;
+			String testOutputFileWithPath=path+"/output/"+"test_"+fileName;
+			String []columnIndicesToRemoveArray=classifierMaster.getColumnIndicesToRemoveArray();
+			ArrayList<Integer> movingAverages=classifierMaster.getMovingAverages();
+			ArrayList<Integer> trendPeriods=classifierMaster.getTrendPeriods();
+			int pips=classifierMaster.getPips();
+			int OLHC_ColumnNum=classifierMaster.getOLHC_ColumnNum();
+			Instances dataset=classifierMaster.getInstances();
+			String baseCurr=classifierMaster.getBaseCurr();
+			String quoteCurr=classifierMaster.getQuoteCurr();
+//			System.out.println(Arrays.toString(columnIndicesToRemoveArray));	
+			String newLineStr="<br>";
+			ArrayList<ArrayList<String>>results=sbst.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,newLineStr);
+//			writer.println(Arrays.toString(results.toArray()));
 			
-			System.out.println(request.getParameter("movingAverages")+
-			request.getParameter("trendPeriods")+
-			request.getParameter("Pips")+
-			request.getParameter("baseCurrency")+
-			request.getParameter("quoteCurrency")+
-			request.getParameter("calculateOn"));
-			String inputFileWithPath=path+"/input/"+fileName;
-			String outputFileWithPath=path+"/output/"+"preprocessed_"+fileName;
-			System.out.println(outputFileWithPath);
-			String []removeStringArray = new String[]{"-R","1,3-7"};
+//			String []removeStringArray = new String[]{"-R","1,3-7"};
 			
 			
-//			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
-			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, OLHC_ColumnNum, baseCurr, quoteCurr);
+			request.setAttribute("results", results);
 			
-			String evaluation=sbst.evaluateClassifier(classifierMaster.getClassifier(), outputFileWithPath, new String[]{"-R","1,3-7"});
-			sbst.temporarilyStoreClassifierMaster(classifierMaster);
-			request.setAttribute("evaluation", evaluation);
-			RequestDispatcher rd=request.getRequestDispatcher("confirmClassifier.jsp");
+			RequestDispatcher rd=request.getRequestDispatcher("testDataResults.jsp");
 			rd.forward(request, response);
 						
 		} catch (FileNotFoundException fne) {

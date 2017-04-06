@@ -9,7 +9,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+		<a href="/DMWeb">Go to homepage</a>
 		${saveConfirmationMessage}<br>
-		<a href="/DMWeb">Go to homepage</a>	
+		
 </body>
 </html>

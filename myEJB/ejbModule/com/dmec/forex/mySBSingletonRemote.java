@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.ejb.Remote;
 
 import weka.classifiers.Classifier;
+import weka.core.Instances;
 
 @Remote
 public interface mySBSingletonRemote {
@@ -14,5 +15,6 @@ public interface mySBSingletonRemote {
 	public boolean saveClassifierMaster(String outputFileWithPath);
 	public ClassifierMaster getClassifierMaster(String classifierName, String filePath);
 	public void temporarilyStoreClassifierMaster(ClassifierMaster classifierMaster);
+	public ArrayList<ArrayList<String>> classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String []columnIndicesToRemoveArray, ArrayList<Integer> movingAverages,ArrayList<Integer> trendPeriods,int pips, int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr, String newLineStr);
 		
 }

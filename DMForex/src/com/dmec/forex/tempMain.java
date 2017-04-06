@@ -32,7 +32,7 @@ public class tempMain {
 		
 		String result="";
 		try {
-			result = Utilities.classifyInstances(classifier, Testdataset);
+//			result = Utilities.classifyInstances(classifier, Testdataset,"\n");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

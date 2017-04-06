@@ -6,6 +6,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 
 import weka.classifiers.Classifier;
+import weka.core.Instances;
 
 /**
  * Session Bean implementation class mySBSingleton
@@ -51,6 +52,11 @@ public class mySBSingleton implements mySBSingletonRemote {
 	@Override
 	public void temporarilyStoreClassifierMaster(ClassifierMaster classifierMaster) {
 		this.tempClassifierMaster=classifierMaster;
+	}
+	
+	@Override
+	public ArrayList<ArrayList<String>> classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String []columnIndicesToRemoveArray, ArrayList<Integer> movingAverages,ArrayList<Integer> trendPeriods,int pips, int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr, String newLineStr){
+		return Classification.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,newLineStr);
 	}
 
 }

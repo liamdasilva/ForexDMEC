@@ -66,8 +66,26 @@ public class WekaTest {
 //		System.out.println(Arrays.toString(removeStringArray));
 //		System.out.println(Classification.evaluateClassifier(cmObject,outputFileWithPath, new String[]{"-R","1,3-7"}));
 		System.out.println(Classification.classifyData(cmObject.getClassifier(), testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray,movingAverages, trendPeriods, pips,
-				columnNum,cmObject.getInstances(),"EUR","EUR"));
-	
+				columnNum,cmObject.getInstances(),"EUR","EUR","\n"));
+		
+		ClassifierMaster classifierMaster=Classification.getClassifierMaster("temp.bin", "/Users/brandonstanley/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/output/");
+		String path="/Users/brandonstanley/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/";
+		String fileName="EURUSD60.csv";
+		
+		Classifier classifier=classifierMaster.getClassifier();
+		testInputFileWithPath=path+"/input/"+fileName;
+		testOutputFileWithPath=path+"/output/"+"test_"+fileName;
+		columnIndicesToRemoveArray=new String[]{"-R","1,3-7"};
+		movingAverages=classifierMaster.getMovingAverages();
+		trendPeriods=classifierMaster.getTrendPeriods();
+		pips=classifierMaster.getPips();
+		int OLHC_ColumnNum=classifierMaster.getOLHC_ColumnNum();
+		Instances dataset=classifierMaster.getInstances();
+		String baseCurr=classifierMaster.getBaseCurr();
+		String quoteCurr=classifierMaster.getQuoteCurr();
+		System.out.println(Arrays.toString(columnIndicesToRemoveArray));
+//		String result=Classification.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,"\n");
+//		System.out.println(result);
 
 		
 

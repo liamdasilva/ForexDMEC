@@ -37,9 +37,8 @@ public class Classification {
 			dataset.remove(dataset.numInstances() - 1);
 		}
 //		System.out.println(dataset);
-		ClassifierMaster cmObject = new ClassifierMaster(classifier, copyOfColumnIndicesToRemoveArray, movingAverages, trendPeriods,
+		ClassifierMaster cmObject = new ClassifierMaster(classifier, columnIndicesToRemoveArray, movingAverages, trendPeriods,
 				pips, OLHC_ColumnNum, dataset, baseCurr,quoteCurr);
-
 		return cmObject;
 	}
 
@@ -48,7 +47,7 @@ public class Classification {
 		
 		String [] copyOfColumnIndicesToRemoveArray=new String[columnIndicesToRemoveArray.length];
 		System.arraycopy( columnIndicesToRemoveArray, 0, copyOfColumnIndicesToRemoveArray, 0, columnIndicesToRemoveArray.length );
-
+		
 		Instances dataset = Utilities.datasetFromFile(outputFileWithPath, copyOfColumnIndicesToRemoveArray);
 
 //		Classifier classifier = cmObject.getClassifier();
@@ -56,11 +55,12 @@ public class Classification {
 		Evaluation eval = Utilities.evaluateClassifier(classifier, dataset);
 		// System.out.println(eval.toSummaryString());
 		String correct = Double.toString(Utilities.round(eval.pctCorrect(), 2));
+//		System.out.println("here is the array:"+Arrays.toString(columnIndicesToRemoveArray));
 		return correct + "% correctly classified instances";
 	}
 
-	public static String classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
-			int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr) {
+	public static ArrayList<ArrayList<String>> classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
+			int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr, String newLineStr) {
 		// classify instances from file using classifier
 //		System.out.println("here are the pips"+cmObject.getPips());
 		Preprocessor.startPreprocessing(testInputFileWithPath, testOutputFileWithPath, movingAverages,trendPeriods,
@@ -77,14 +77,14 @@ public class Classification {
 		}
 //		Utilities.saveToARFF(dataset, "data/TESTSETARFF.arff");
 		// Utilities.saveToARFF(testOutputFileWithPath, outfile)
-		String result = "";
+		ArrayList<ArrayList<String>>results = new ArrayList<ArrayList<String>>();
 		try {
-			result = Utilities.classifyInstances(classifier, dataset);
+			results = Utilities.classifyInstances(classifier, dataset, newLineStr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return result;
+		return results;
 	}
 
 	public static boolean saveClassifierMaster(ClassifierMaster cmObject, String outputFileWithPath) {

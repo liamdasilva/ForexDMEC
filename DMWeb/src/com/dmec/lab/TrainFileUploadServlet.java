@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -120,10 +121,10 @@ public class TrainFileUploadServlet extends HttpServlet {
 			
 //			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
 			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum,baseCurr, quoteCurr);
-			
 			String evaluation=sbst.evaluateClassifier(classifierMaster.getClassifier(), outputFileWithPath, new String[]{"-R","1,3-7"});
 			sbst.temporarilyStoreClassifierMaster(classifierMaster);
 			request.setAttribute("evaluation", evaluation);
+//			request.setAttribute("temp", Arrays.toString(classifierMaster.getColumnIndicesToRemoveArray()));
 			RequestDispatcher rd=request.getRequestDispatcher("confirmClassifier.jsp");
 			rd.forward(request, response);
 						
