@@ -1,5 +1,8 @@
 @CHARSET "ISO-8859-1";
-
+@font-face {
+    font-family: Raleway;
+    src: url("Raleway-Regular.ttf") /* TTF file for CSS3 browsers */
+}
 body {
 	background-color: #f0f0f0;
 	font-family: "Raleway-Regular", Raleway, sans-serif;	
