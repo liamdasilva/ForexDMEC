@@ -25,8 +25,8 @@ public class mySBStateless implements mySBStatelessRemote {
     @Override
 	public ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath,
 			String[] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
-			int OLHC_ColumnNum) {
-		return Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, false);
+			int OLHC_ColumnNum, String baseCurr, String quoteCurr) {
+		return Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, false,baseCurr, quoteCurr);
 
 		// TODO Auto-generated method stub
 		

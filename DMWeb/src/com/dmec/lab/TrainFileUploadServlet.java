@@ -103,6 +103,8 @@ public class TrainFileUploadServlet extends HttpServlet {
 			}else if(strCalculateOn.equals("close")){
 				columnNum=5;
 			}
+			String baseCurr=request.getParameter("baseCurrency");
+			String quoteCurr=request.getParameter("quoteCurrency");
 			
 			System.out.println(request.getParameter("movingAverages")+
 			request.getParameter("trendPeriods")+
@@ -117,7 +119,7 @@ public class TrainFileUploadServlet extends HttpServlet {
 			
 			
 //			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
-			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum);
+			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum,baseCurr, quoteCurr);
 			
 			String evaluation=sbst.evaluateClassifier(classifierMaster.getClassifier(), outputFileWithPath, new String[]{"-R","1,3-7"});
 			sbst.temporarilyStoreClassifierMaster(classifierMaster);

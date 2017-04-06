@@ -19,10 +19,10 @@ public class Classification {
 
 	public static ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath,
 			String[] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
-			int OLHC_ColumnNum, boolean testDataFlag) {
+			int OLHC_ColumnNum, boolean testDataFlag, String baseCurr, String quoteCurr) {
 
 		Preprocessor.startPreprocessing(inputFileWithPath, outputFileWithPath, movingAverages, trendPeriods, pips,
-				OLHC_ColumnNum, testDataFlag);
+				OLHC_ColumnNum, testDataFlag, baseCurr, quoteCurr);
 		String [] copyOfColumnIndicesToRemoveArray=new String[columnIndicesToRemoveArray.length];
 		System.arraycopy( columnIndicesToRemoveArray, 0, copyOfColumnIndicesToRemoveArray, 0, columnIndicesToRemoveArray.length );
 
@@ -38,7 +38,7 @@ public class Classification {
 		}
 //		System.out.println(dataset);
 		ClassifierMaster cmObject = new ClassifierMaster(classifier, copyOfColumnIndicesToRemoveArray, movingAverages, trendPeriods,
-				pips, OLHC_ColumnNum, dataset);
+				pips, OLHC_ColumnNum, dataset, baseCurr,quoteCurr);
 
 		return cmObject;
 	}
@@ -60,11 +60,11 @@ public class Classification {
 	}
 
 	public static String classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
-			int OLHC_ColumnNum,Instances dataset) {
+			int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr) {
 		// classify instances from file using classifier
 //		System.out.println("here are the pips"+cmObject.getPips());
 		Preprocessor.startPreprocessing(testInputFileWithPath, testOutputFileWithPath, movingAverages,trendPeriods,
-				pips,OLHC_ColumnNum,true);
+				pips,OLHC_ColumnNum,true, baseCurr, quoteCurr);
 		
 		String [] copyOfColumnIndicesToRemoveArray=new String[columnIndicesToRemoveArray.length];
 		System.arraycopy( columnIndicesToRemoveArray, 0, copyOfColumnIndicesToRemoveArray, 0, columnIndicesToRemoveArray.length );

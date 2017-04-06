@@ -15,8 +15,10 @@ public class ClassifierMaster implements Serializable{
 	private int pips;
 	private int OLHC_ColumnNum;
 	private Instances instances;
+	private String baseCurr;
+	private String quoteCurr;
 	
-	public ClassifierMaster(Classifier classifier, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips, int OLHC_ColumnNum,Instances instances){
+	public ClassifierMaster(Classifier classifier, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips, int OLHC_ColumnNum,Instances instances, String baseCurr, String quoteCurr){
 		this.setClassifier(classifier);
 		this.setColumnIndicesToRemoveArray(columnIndicesToRemoveArray);
 		this.setMovingAverages(movingAverages);
@@ -24,6 +26,8 @@ public class ClassifierMaster implements Serializable{
 		this.setPips(pips);
 		this.setOLHC_ColumnNum(OLHC_ColumnNum);
 		this.setInstances(instances);
+		this.setBaseCurr(baseCurr);
+		this.setQuoteCurr(quoteCurr);
 	}
 
 	public Classifier getClassifier() {
@@ -80,6 +84,22 @@ public class ClassifierMaster implements Serializable{
 
 	public void setInstances(Instances instances) {
 		this.instances = instances;
+	}
+
+	public String getBaseCurr() {
+		return baseCurr;
+	}
+
+	public void setBaseCurr(String baseCurr) {
+		this.baseCurr = baseCurr;
+	}
+
+	public String getQuoteCurr() {
+		return quoteCurr;
+	}
+
+	public void setQuoteCurr(String quoteCurr) {
+		this.quoteCurr = quoteCurr;
 	}
 	
 	

@@ -62,11 +62,11 @@ public class WekaTest {
 		Integer pips=10;
 		Integer columnNum=5;		
 		
-		ClassifierMaster cmObject=Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum,false);
+		ClassifierMaster cmObject=Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum,false,"EUR","EUR");
 //		System.out.println(Arrays.toString(removeStringArray));
 //		System.out.println(Classification.evaluateClassifier(cmObject,outputFileWithPath, new String[]{"-R","1,3-7"}));
 		System.out.println(Classification.classifyData(cmObject.getClassifier(), testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray,movingAverages, trendPeriods, pips,
-				columnNum,cmObject.getInstances()));
+				columnNum,cmObject.getInstances(),"EUR","EUR"));
 	
 
 		

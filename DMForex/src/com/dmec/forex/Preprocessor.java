@@ -16,8 +16,10 @@ public class Preprocessor {
 	private static final String STR_ABOVE="ABOVE";
 	private static final String STR_BELOW="BELOW";
 	private static final String STR_EQUAL="EQUAL";
+	private static final String STR_JPY="JPY";
 //	private static final String OUTPUT_FOLDER_PATH="data/output/";
 //	private static final String DATA_FOLDER_PATH="data/";
+	
 	
 	public static String calcTrend(int num, ArrayList<ArrayList<String>> dataset, int columnNum) {
 		boolean trendUp = false;
@@ -73,7 +75,7 @@ public class Preprocessor {
 	}
 
 	public static void startPreprocessing(String inputFileName, String outputFileName, ArrayList<Integer> movingAverages,
-			ArrayList<Integer> trendPeriods, int pips, int columnNum, boolean testData) {
+			ArrayList<Integer> trendPeriods, int pips, int columnNum, boolean testData, String baseCurr, String quoteCurr) {
 //		String csvFile = "src/EURUSD60.csv";
 		BufferedReader br = null;
 		String line = "";
@@ -207,9 +209,15 @@ public class Preprocessor {
 				currentRowClose=Double.parseDouble(currentRow.get(columnNum));
 				// classification
 				String prevRowClassification;
-				if ((currentRowClose - prevRowClose) > (pips / 10000.0)) {
+				Double pipDivisor=0.0;
+				if(quoteCurr.equals("JPY")){
+					pipDivisor=100.0;
+				}else{
+					pipDivisor=10000.0;
+				}
+				if ((currentRowClose - prevRowClose) > (pips / pipDivisor)) {
 					prevRowClassification = "," + "+" + pips + "pips";
-				} else if ((currentRowClose - prevRowClose) < (-1 * pips / 10000.0)) {
+				} else if ((currentRowClose - prevRowClose) < (-1 * pips / pipDivisor)) {
 					prevRowClassification = "," + "-" + pips + "pips";
 
 				} else {
