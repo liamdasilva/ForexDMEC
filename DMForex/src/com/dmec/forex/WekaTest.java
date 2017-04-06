@@ -46,7 +46,7 @@ public class WekaTest {
 //		
 //		//new function callClassifier
 ////		removeString = "-R 3-7";
-		String inputFileWithPath="data/liamEURUSD15.csv";
+		String inputFileWithPath="/Users/brandonstanley/desktop/training and testing files/EURUSD15trainingJanToFeb.csv";
 		String outputFileWithPath="data/output/output.csv";
 		String testInputFileWithPath="data/liamEURUSD15.csv";
 		String testOutputFileWithPath="data/output/preprocessed_liamEURUSD15.csvEURUSD60edit2Testset.csv";
@@ -73,8 +73,8 @@ public class WekaTest {
 		String fileName="EURUSD60.csv";
 		
 		Classifier classifier=classifierMaster.getClassifier();
-		testInputFileWithPath=path+"/input/"+fileName;
-		testOutputFileWithPath=path+"/output/"+"test_"+fileName;
+		testInputFileWithPath="/Users/brandonstanley/desktop/training and testing files/EURUSD15testingMarToPresent.csv";
+		testOutputFileWithPath="data/output/test_"+fileName;
 		columnIndicesToRemoveArray=new String[]{"-R","1,3-7"};
 		movingAverages=classifierMaster.getMovingAverages();
 		trendPeriods=classifierMaster.getTrendPeriods();
@@ -84,7 +84,8 @@ public class WekaTest {
 		String baseCurr=classifierMaster.getBaseCurr();
 		String quoteCurr=classifierMaster.getQuoteCurr();
 		System.out.println(Arrays.toString(columnIndicesToRemoveArray));
-//		String result=Classification.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,"\n");
+		System.out.println(classifierMaster.getInstances());
+		ArrayList<ArrayList<String>> result=Classification.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,"\n");
 //		System.out.println(result);
 
 		

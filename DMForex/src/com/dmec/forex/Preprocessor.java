@@ -206,7 +206,7 @@ public class Preprocessor {
 					}else if(Double.parseDouble(currentRow.get(columnNum))<movingAvg){
 						movingAvgVal=STR_BELOW;
 					}else{
-						movingAvgVal=STR_EQUAL;
+						movingAvgVal=STR_ABOVE;
 					}
 //					line += "," + movingAvg;
 					line+=","+movingAvgVal;
