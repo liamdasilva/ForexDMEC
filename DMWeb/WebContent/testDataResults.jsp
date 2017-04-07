@@ -38,6 +38,7 @@ tr:nth-child(even) {
 	int correctlyClassifiedNonRangingInstances=0;
 	int totalNonRangingClassifications=0;
 	int incorrectlyClassifiedNonRangingInstances=0;
+	int nonRangingClassifcationsThatWereRanging=0;
 	String table="";
 	table+="<table>";
 	/* out.println("<table>"); */
@@ -56,6 +57,8 @@ tr:nth-child(even) {
 					incorrectlyClassifiedNonRangingInstances++;
 				}else if(results.get(i).get(0).contains("-")&&results.get(i).get(1).contains("+")){
 					incorrectlyClassifiedNonRangingInstances++;
+				}else if(!results.get(i).get(1).equals("RANGING")&&results.get(i).get(0).equals("RANGING")){
+					nonRangingClassifcationsThatWereRanging++;
 				}
 				totalNonRangingClassifications++;
 			}
@@ -79,6 +82,8 @@ tr:nth-child(even) {
 	table+="</table>";
 	out.println(correctlyClassifiedNonRangingInstances+"/"+totalNonRangingClassifications+" successful trading opportunities were captured in the test data set<br>");
 	out.println(incorrectlyClassifiedNonRangingInstances+"/"+totalNonRangingClassifications+" unsuccessful trading opportunities were captured in the test data set<br>");
+	out.println(nonRangingClassifcationsThatWereRanging+"/"+totalNonRangingClassifications+" classifications that ended up 'RANGING'<br>");
+
 	Double accuracy=(double)counter/(double)(results.size());
 	out.println("Total correctly classified instances (from test data): "+accuracy*100+"%"+"<br>");
 	out.println("Here are the classification results of the test data:<br>");
