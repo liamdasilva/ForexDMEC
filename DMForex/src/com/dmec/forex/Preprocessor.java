@@ -17,6 +17,12 @@ public class Preprocessor {
 	private static final String STR_BELOW="BELOW";
 	private static final String STR_EQUAL="EQUAL";
 	private static final String STR_JPY="JPY";
+	private static final int LOW_COLUMN_NUM=4;
+	private static final int HIGH_COLUMN_NUM=3;
+	private static final int OPEN_COLUMN_NUM=2;
+	private static final int CLOSE_COLUMN_NUM=5;
+	private static final int CANDLESTICK_TREND_MA=50;
+
 //	private static final String OUTPUT_FOLDER_PATH="data/output/";
 //	private static final String DATA_FOLDER_PATH="data/";
 	
@@ -70,6 +76,8 @@ public class Preprocessor {
 		return sum / num;
 	}
 	
+//	public static double calcNextMovingAverage
+	
 	public static void preprocessTestData(){
 		
 	}
@@ -85,7 +93,7 @@ public class Preprocessor {
 
 		ArrayList<ArrayList<String>> dataset = new ArrayList();
 
-		int NUM_ROWS_TO_STORE = 0;
+		int NUM_ROWS_TO_STORE = CANDLESTICK_TREND_MA;
 //		int columnNum = 5;
 		
 		
@@ -123,18 +131,28 @@ public class Preprocessor {
 			for (Integer trendPeriodVal : trendPeriods) {
 				columnHeaders+=","+trendPeriodVal+"_Period_Trend";
 			}
+			columnHeaders+=",CandleStick_Pattern";
 			columnHeaders+=",Class_"+pips+"_pips";
 			bw.write(columnHeaders+'\n');
 			
 			int rowCounter = 0;
 			ArrayList<String> firstRow=new ArrayList<String>();
-			Double prevRowClose=0.0;
-			Double currentRowClose;
+//			Double prevRowClose=0.0;
+			Candlestick prevCandle=null;
+			Candlestick currentCandle=null;
+//			Double currentRowClose;
+//			Double currentRowLow;
+//			Double currentRowHigh;
 			
 			if(NUM_ROWS_TO_STORE==0 && (line = br.readLine()) != null){
 				String[] row = line.split(cvsSplitBy);
 				firstRow=new ArrayList<String>(Arrays.asList(row));
-				prevRowClose=Double.parseDouble(firstRow.get(columnNum));
+//				prevRowClose=Double.parseDouble(firstRow.get(columnNum));
+				prevCandle=new Candlestick(Double.parseDouble(firstRow.get(OPEN_COLUMN_NUM)),
+						Double.parseDouble(firstRow.get(HIGH_COLUMN_NUM)),
+						Double.parseDouble(firstRow.get(LOW_COLUMN_NUM)),
+						Double.parseDouble(firstRow.get(CLOSE_COLUMN_NUM)));
+				
 			}
 				
 			while (rowCounter < NUM_ROWS_TO_STORE && (line = br.readLine()) != null) {
@@ -150,7 +168,11 @@ public class Preprocessor {
 //				System.out.println(line);
 				dataset.add(new ArrayList<String>(Arrays.asList(row)));
 				firstRow=new ArrayList<String>(Arrays.asList(row));
-				prevRowClose=Double.parseDouble(firstRow.get(columnNum));
+//				prevRowClose=Double.parseDouble(firstRow.get(columnNum));
+				prevCandle=new Candlestick(Double.parseDouble(firstRow.get(OPEN_COLUMN_NUM)),
+						Double.parseDouble(firstRow.get(HIGH_COLUMN_NUM)),
+						Double.parseDouble(firstRow.get(LOW_COLUMN_NUM)),
+						Double.parseDouble(firstRow.get(CLOSE_COLUMN_NUM)));
 				rowCounter++;
 			}
 
@@ -173,17 +195,21 @@ public class Preprocessor {
 				prevMovingAverageValues.add(initMovingAvg);
 			}
 
+			double prevCandlestickTrend_MA=calcInitMovingAverage(CANDLESTICK_TREND_MA, dataset, columnNum);
+			double currentCandlestickTrend_MA;
 			// calculate initial trends
 			for (Integer trendPeriodVal : trendPeriods) {
 				String trend = calcTrend(trendPeriodVal, dataset, columnNum);
 				line += "," + trend;
 			}
+			line+=","+"NONE";
 			String prevRowToWrite=line;
 //			bw.write(line);
 
 			while ((line = br.readLine()) != null) {
 //				System.out.println(line);
 				String[] row = line.split(cvsSplitBy);
+//				System.out.println(line);
 				String time=row[1];
 				int index=row[1].indexOf(":");
 				time=time.substring(0, index+1)+"00";	
@@ -223,7 +249,20 @@ public class Preprocessor {
 				dataset.remove(0);
 //				Double prevRowClose = Double.parseDouble((dataset.get(dataset.size() - 2).get(columnNum)));
 //				Double currentRowClose = Double.parseDouble((dataset.get(dataset.size() - 1).get(columnNum)));
-				currentRowClose=Double.parseDouble(currentRow.get(columnNum));
+				currentCandle=new Candlestick(Double.parseDouble(currentRow.get(OPEN_COLUMN_NUM)),
+						Double.parseDouble(currentRow.get(HIGH_COLUMN_NUM)),
+						Double.parseDouble(currentRow.get(LOW_COLUMN_NUM)),
+						Double.parseDouble(currentRow.get(CLOSE_COLUMN_NUM)));
+//				System.out.println(dataset.size());
+				Double valueToRemove = Double
+						.parseDouble(dataset.get((dataset.size()-1) - (CANDLESTICK_TREND_MA-1)).get(columnNum));
+				currentCandlestickTrend_MA=calcNextMovingAverage(prevCandlestickTrend_MA, CANDLESTICK_TREND_MA,
+						new ArrayList<String>(Arrays.asList(row)), columnNum, valueToRemove);
+				String candlestickPattern=Candlestick.getPattern(currentCandle, prevCandle, prevCandlestickTrend_MA,currentCandlestickTrend_MA);
+				line+=","+candlestickPattern;
+//				currentRowLow=Double.parseDouble(currentRow.get(LOW_COLUMN_NUM));
+//				currentRowHigh=Double.parseDouble(currentRow.get(HIGH_COLUMN_NUM));
+//				currentRowClose=Double.parseDouble(currentRow.get(columnNum));
 				// classification
 				String prevRowClassification;
 				Double pipDivisor=0.0;
@@ -232,9 +271,9 @@ public class Preprocessor {
 				}else{
 					pipDivisor=10000.0;
 				}
-				if ((currentRowClose - prevRowClose) > (pips / pipDivisor)) {
+				if ((currentCandle.high - prevCandle.close) > (pips / pipDivisor)) {
 					prevRowClassification = "," + "+" + pips + "pips";
-				} else if ((currentRowClose - prevRowClose) < (-1 * pips / pipDivisor)) {
+				} else if ((currentCandle.low - prevCandle.close) < (-1 * pips / pipDivisor)) {
 					prevRowClassification = "," + "-" + pips + "pips";
 
 				} else {
@@ -245,7 +284,9 @@ public class Preprocessor {
 				prevRowToWrite+=prevRowClassification+'\n';
 				bw.write(prevRowToWrite);
 				prevRowToWrite=line;
-				prevRowClose=currentRowClose;
+//				prevRowClose=currentRowClose;
+				prevCandle=currentCandle;
+				prevCandlestickTrend_MA=currentCandlestickTrend_MA;
 			}
 			if(testData){
 				bw.write(prevRowToWrite+",?");

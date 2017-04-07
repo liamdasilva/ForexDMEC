@@ -46,19 +46,19 @@ public class WekaTest {
 //		
 //		//new function callClassifier
 ////		removeString = "-R 3-7";
-		String inputFileWithPath="/Users/brandonstanley/desktop/training and testing files/EURUSD15trainingJanToFeb.csv";
+		String inputFileWithPath="/Users/brandonstanley/desktop/training and testing files/EURUSD60trainingJanFeb.csv";
 		String outputFileWithPath="data/output/output.csv";
 		String testInputFileWithPath="data/liamEURUSD15.csv";
 		String testOutputFileWithPath="data/output/preprocessed_liamEURUSD15.csvEURUSD60edit2Testset.csv";
 		ArrayList<Integer> movingAverages=new ArrayList<Integer>();
-		movingAverages.add(20);
+		movingAverages.add(10);
 
-		movingAverages.add(50);
-		movingAverages.add(100);
+		movingAverages.add(20);
+//		movingAverages.add(100);
 
 		ArrayList<Integer> trendPeriods=new ArrayList<Integer>();
-//		trendPeriods.add(100);
-//		trendPeriods.add(200);
+		trendPeriods.add(5);
+		trendPeriods.add(10);
 		Integer pips=10;
 		Integer columnNum=5;		
 		
@@ -68,23 +68,25 @@ public class WekaTest {
 		System.out.println(Classification.classifyData(cmObject.getClassifier(), testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray,movingAverages, trendPeriods, pips,
 				columnNum,cmObject.getInstances(),"EUR","EUR","\n"));
 		
-		ClassifierMaster classifierMaster=Classification.getClassifierMaster("temp.bin", "/Users/brandonstanley/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/output/");
-		String path="/Users/brandonstanley/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/";
+//		ClassifierMaster classifierMaster=Classification.getClassifierMaster("temp.bin", "/Users/brandonstanley/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/output/");
+		
+		//		String path="/Users/brandonstanley/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/";
 		String fileName="EURUSD60.csv";
 		
-		Classifier classifier=classifierMaster.getClassifier();
-		testInputFileWithPath="/Users/brandonstanley/desktop/training and testing files/EURUSD15testingMarToPresent.csv";
+		Classifier classifier=cmObject.getClassifier();
+		testInputFileWithPath="/Users/brandonstanley/desktop/training and testing files/EURUSD60testingMar.csv";
 		testOutputFileWithPath="data/output/test_"+fileName;
 		columnIndicesToRemoveArray=new String[]{"-R","1,3-7"};
-		movingAverages=classifierMaster.getMovingAverages();
-		trendPeriods=classifierMaster.getTrendPeriods();
-		pips=classifierMaster.getPips();
-		int OLHC_ColumnNum=classifierMaster.getOLHC_ColumnNum();
-		Instances dataset=classifierMaster.getInstances();
-		String baseCurr=classifierMaster.getBaseCurr();
-		String quoteCurr=classifierMaster.getQuoteCurr();
+		movingAverages=cmObject.getMovingAverages();
+		trendPeriods=cmObject.getTrendPeriods();
+		pips=cmObject.getPips();
+		int OLHC_ColumnNum=cmObject.getOLHC_ColumnNum();
+		Instances dataset=cmObject.getInstances();
+		String baseCurr=cmObject.getBaseCurr();
+		String quoteCurr=cmObject.getQuoteCurr();
 		System.out.println(Arrays.toString(columnIndicesToRemoveArray));
-		System.out.println(classifierMaster.getInstances());
+		System.out.println(cmObject.getClassifier());
+//		System.out.println(classifierMaster.getInstances());
 		ArrayList<ArrayList<String>> result=Classification.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,"\n");
 //		System.out.println(result);
 
