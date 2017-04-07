@@ -42,6 +42,9 @@ public class TrainFileUploadServlet extends HttpServlet {
     private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};
 	private final static Logger LOGGER = Logger.getLogger(TrainFileUploadServlet.class.getCanonicalName());
+	private final static String TrainingFilesFolderName="TrainingFiles";
+	private final static String PreprocessedTrainingFilesFolderName="PreprocessedTrainingFiles";
+
 
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +63,7 @@ public class TrainFileUploadServlet extends HttpServlet {
 		final PrintWriter writer = response.getWriter();
 
 		try {
-			out = new FileOutputStream(new File(path + File.separator + "input" + File.separator + fileName));
+			out = new FileOutputStream(new File(path + File.separator + TrainingFilesFolderName + File.separator + fileName));
 			filecontent = filePart.getInputStream();
 
 			int read = 0;
@@ -69,9 +72,9 @@ public class TrainFileUploadServlet extends HttpServlet {
 			while ((read = filecontent.read(bytes)) != -1) {
 				out.write(bytes, 0, read);
 			}
-			writer.println("New file " + fileName + " created at " + path + File.separator + "input");
+			writer.println("New file " + fileName + " created at " + path + File.separator + TrainingFilesFolderName);
 			LOGGER.log(Level.INFO, "File {0} being uploaded to {1} ",
-					new Object[] { fileName, path + File.separator + "input" });
+					new Object[] { fileName, path + File.separator + TrainingFilesFolderName });
 			
 			//CALL THE CLASSIFICATION
 			String[] strMovingAveragesArray=request.getParameter("movingAverages").split(",");
@@ -113,8 +116,8 @@ public class TrainFileUploadServlet extends HttpServlet {
 			request.getParameter("baseCurrency")+
 			request.getParameter("quoteCurrency")+
 			request.getParameter("calculateOn"));
-			String inputFileWithPath=path+"/input/"+fileName;
-			String outputFileWithPath=path+"/output/"+"preprocessed_"+fileName;
+			String inputFileWithPath=path+File.separator+TrainingFilesFolderName+File.separator+fileName;
+			String outputFileWithPath=path+File.separator+PreprocessedTrainingFilesFolderName+File.separator+fileName;
 			System.out.println(outputFileWithPath);
 			String []removeStringArray = new String[]{"-R","1,3-7"};
 			

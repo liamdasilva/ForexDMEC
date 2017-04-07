@@ -46,6 +46,10 @@ public class TestFileUploadServlet extends HttpServlet {
     private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};
 	private final static Logger LOGGER = Logger.getLogger(TestFileUploadServlet.class.getCanonicalName());
+	private final static String TestingFilesFolderName="TestingFiles";
+	private final static String PreprocessedTestingFilesFolderName="PreprocessedTestingFiles";
+	private final static String ObjectsFolderName="Objects";
+
 
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -67,7 +71,7 @@ public class TestFileUploadServlet extends HttpServlet {
 		final PrintWriter writer = response.getWriter();
 
 		try {
-			out = new FileOutputStream(new File(path + File.separator + "input" + File.separator + fileName));
+			out = new FileOutputStream(new File(path + File.separator + TestingFilesFolderName + File.separator + fileName));
 			filecontent = filePart.getInputStream();
 
 			int read = 0;
@@ -76,16 +80,16 @@ public class TestFileUploadServlet extends HttpServlet {
 			while ((read = filecontent.read(bytes)) != -1) {
 				out.write(bytes, 0, read);
 			}
-			writer.println("New file " + fileName + " created at " + path + File.separator + "input");
+			writer.println("New file " + fileName + " created at " + path + File.separator + TestingFilesFolderName);
 			LOGGER.log(Level.INFO, "File {0} being uploaded to {1} ",
-					new Object[] { fileName, path + File.separator + "input" });
+					new Object[] { fileName, path + File.separator + TestingFilesFolderName });
 			String objectName=request.getParameter("objectName");
 			System.out.println(objectName);
 
-			ClassifierMaster classifierMaster=sbst.getClassifierMaster(objectName, path+"/output/");
+			ClassifierMaster classifierMaster=sbst.getClassifierMaster(objectName, path+File.separator+ObjectsFolderName+File.separator);
 			Classifier classifier=classifierMaster.getClassifier();
-			String testInputFileWithPath=path+"/input/"+fileName;
-			String testOutputFileWithPath=path+"/output/"+"test_"+fileName;
+			String testInputFileWithPath=path+File.separator+TestingFilesFolderName+File.separator+fileName;
+			String testOutputFileWithPath=path+File.separator+PreprocessedTestingFilesFolderName+File.separator+fileName;
 			String []columnIndicesToRemoveArray=classifierMaster.getColumnIndicesToRemoveArray();
 			ArrayList<Integer> movingAverages=classifierMaster.getMovingAverages();
 			ArrayList<Integer> trendPeriods=classifierMaster.getTrendPeriods();

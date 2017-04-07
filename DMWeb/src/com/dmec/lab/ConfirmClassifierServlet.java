@@ -40,6 +40,8 @@ public class ConfirmClassifierServlet extends HttpServlet {
     private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};
 	private final static Logger LOGGER = Logger.getLogger(ConfirmClassifierServlet.class.getCanonicalName());
+	private final static String ObjectsFolderName="Objects";
+
 
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -53,7 +55,7 @@ public class ConfirmClassifierServlet extends HttpServlet {
 		String fileName=request.getParameter("fileName");
 		if(selection.equals("Yes")){
 			final String path = this.getServletContext().getRealPath("/WEB-INF/");
-			boolean saveSuccessful=sbst.saveClassifierMaster(path+"/output/"+fileName);
+			boolean saveSuccessful=sbst.saveClassifierMaster(path+File.separator+ObjectsFolderName+File.separator+fileName);
 			if(saveSuccessful){
 				request.setAttribute("saveConfirmationMessage", "Classifier was successfully saved");
 

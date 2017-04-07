@@ -40,6 +40,8 @@ public class getObjectsServlet extends HttpServlet {
     private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};
 	private final static Logger LOGGER = Logger.getLogger(getObjectsServlet.class.getCanonicalName());
+	private final static String ObjectsFolderName="Objects";
+
 
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -67,7 +69,7 @@ public class getObjectsServlet extends HttpServlet {
 //		}
 		final String path = this.getServletContext().getRealPath("/WEB-INF/");
 
-		File[] files=new File(path+"/output").listFiles();
+		File[] files=new File(path+File.separator+ObjectsFolderName).listFiles();
 		String listOfObjects="";
 		for(File file: files){
 			if(!file.isDirectory()){
