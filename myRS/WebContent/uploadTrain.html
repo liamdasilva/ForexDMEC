@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>File Upload</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel='stylesheet' type='text/css' href='style.css'>
+<link rel="icon" type="image/ico" href="favicon.png">
+</head>
+<body>
+	<header>
+		<h1>Forex Data Mining</h1>
+		<h3>Upload a file and enter your customization options for
+			parsing.</h3>
+	</header>
+	<form method="POST" action="rest/uploadTrain" enctype="multipart/form-data">
+		File: <input type="file" name="file" id="file" class="myLabel2" /> <br>
+		<br> Moving Average(s): <input type="text" name="movingAverages"><br>
+		<br> Trend Period(s): <input type="text" name="trendPeriods"><br>
+		<br> Pips: <input type="text" name="Pips"><br>
+		<br> Base Currency: <select name="baseCurrency">
+			<option value="USD">USD</option>
+			<option value="EUR">EUR</option>
+			<option value="JPY">JPY</option>
+		</select> <br>
+		<br> Quote Currency:  <select name="quoteCurrency">
+			<option value="USD">USD</option>
+			<option value="EUR">EUR</option>
+			<option value="JPY">JPY</option>
+		</select> <br> <br> Calculate Moving Average on:  <select name="calculateOn">
+			<option value="high">High</option>
+			<option value="low">Low</option>
+			<option value="open">Open</option>
+			<option value="close">Close</option>
+		</select> <br> <br> <input type="submit" value="Upload" name="upload"
+			id="upload"/>
+	</form>
+</body>
+</html>
