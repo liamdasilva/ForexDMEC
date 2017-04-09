@@ -33,10 +33,6 @@ import weka.core.Instances;
 public class myDMRS {
 
 	@EJB
-	private mySBStateful sbsf;
-	@EJB
-	private mySBStateless sbsl;
-	@EJB
 	private mySBSingleton sbst;
 	private final static String TestingFilesFolderName = "TestingFiles";
 	private final static String PreprocessedTestingFilesFolderName = "PreprocessedTestingFiles";
@@ -58,6 +54,7 @@ public class myDMRS {
 		String path = "C:";
 		String TrainingFilesFolderName = "input";
 		String PreprocessedTrainingFilesFolderName = "output";
+		
 		String fileName = "";
 		final String ObjectsFolderName = "Objects";
 
@@ -145,6 +142,8 @@ public class myDMRS {
 
 		String inputFileWithPath = path + File.separator + TrainingFilesFolderName + File.separator + fileName;
 		String outputFileWithPath = path + File.separator + PreprocessedTrainingFilesFolderName + File.separator
+				+ fileName;
+		String arffOutputFileWithPath = path + File.separator + PreprocessedTrainingFilesFolderName + File.separator
 				+ fileName;
 		System.out.println(outputFileWithPath);
 		String[] removeStringArray = new String[] { "-R", "1,3-7" };
