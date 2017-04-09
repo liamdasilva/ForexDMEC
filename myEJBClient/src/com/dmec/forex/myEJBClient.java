@@ -32,7 +32,6 @@ public class myEJBClient {
     	System.out.println("Enter the name of the classifier you would like:");
     	Scanner scanner = new Scanner(System.in);
     	String input = scanner.nextLine();
-    	System.out.println(input);
     	ClassifierMaster cm = myBean.getClassifierMaster(input, objectsPath);
     	System.out.println("Enter the path of the testing file you would like to use:");
     	input = scanner.nextLine();

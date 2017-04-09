@@ -27,19 +27,20 @@ public class powerSetTester {
     }
 
 	public static void main(String[] args) {
-		String inputFileWithPath = "/Users/brandonstanley/desktop/training and testing files/EURUSD60trainingJanFeb.csv";
-		String outputFileWithPath = "/Users/brandonstanley/desktop/training and testing files/preprocessed_EURUSD60trainingJanFeb.csv";
-		String testingARFF="/Users/brandonstanley/desktop/training and testing files/test.arff";
-		String testInputFileWithPath = "/Users/brandonstanley/desktop/training and testing files/EURUSD60testingMar.csv";
-		String testOutputFileWithPath = "/Users/brandonstanley/desktop/training and testing files/preprocessed_EURUSD60testingMar.csv";
-		String trainingARFF="/Users/brandonstanley/desktop/training and testing files/training.arff";
+		String userDir = System.getProperty("user.home");
+		String inputFileWithPath = userDir+"/desktop/training and testing files/EURUSD60trainingJanFeb.csv";
+		String outputFileWithPath = userDir+"/desktop/training and testing files/preprocessed_EURUSD60trainingJanFeb.csv";
+		String testingARFF= userDir+"/desktop/training and testing files/test.arff";
+		String testInputFileWithPath = userDir+"/desktop/training and testing files/EURUSD60testingMar.csv";
+		String testOutputFileWithPath = userDir+"/desktop/training and testing files/preprocessed_EURUSD60testingMar.csv";
+		String trainingARFF= userDir+"/desktop/training and testing files/training.arff";
 		
 		ArrayList<Integer> movingAverages=new ArrayList<Integer>();
-		movingAverages.add(3);
-		movingAverages.add(5);
+		//movingAverages.add(3);
+		//movingAverages.add(5);
 		movingAverages.add(8);
-
 		movingAverages.add(10);
+		movingAverages.add(20);
 		movingAverages.add(50);
 		movingAverages.add(100);
 		movingAverages.add(200);
@@ -50,7 +51,7 @@ public class powerSetTester {
 		trendPeriods.add(3);
 		trendPeriods.add(4);
 		trendPeriods.add(5);
-		trendPeriods.add(10);
+		trendPeriods.add(6);
 //		trendPeriods.add(20);
 
 		
@@ -61,10 +62,9 @@ public class powerSetTester {
 		pipsToTry.add(12);
 		pipsToTry.add(13);
 		pipsToTry.add(14);
-		
-		pipsToTry.add(15);
-//		pipsToTry.add(16);
-//		pipsToTry.add(16);
+ 		pipsToTry.add(15);
+		pipsToTry.add(16);
+		pipsToTry.add(17);
 //		pipsToTry.add(20);
 
 //		int pips=24;

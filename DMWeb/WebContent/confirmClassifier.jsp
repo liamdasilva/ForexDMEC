@@ -12,7 +12,7 @@
 	${evaluation}
 	Would you like to keep this classification?
 	<form method="POST" action="confirm" enctype="multipart/form-data">
-	  	<input type="radio" name="confirmSave" value="Yes"> Yes<br>
+	  	<input type="radio" name="confirmSave" value="Yes" checked="checked"> Yes<br>
 	  	<input type="radio" name="confirmSave" value="No"> No<br>
 	  	If yes, please enter the name you'd like to give the Classifier:
 	   <input type="text" name="fileName" id="filename" /> <br>
