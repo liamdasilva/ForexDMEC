@@ -17,7 +17,7 @@ import weka.core.Instances;
 
 public class Classification {
 
-	public static ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath,
+	public static ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath,String arffOutputFileWithPath,
 			String[] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
 			int OLHC_ColumnNum, boolean testDataFlag, String baseCurr, String quoteCurr) {
 
@@ -25,17 +25,18 @@ public class Classification {
 				OLHC_ColumnNum, testDataFlag, baseCurr, quoteCurr);
 		String [] copyOfColumnIndicesToRemoveArray=new String[columnIndicesToRemoveArray.length];
 		System.arraycopy( columnIndicesToRemoveArray, 0, copyOfColumnIndicesToRemoveArray, 0, columnIndicesToRemoveArray.length );
-
-		Instances dataset = Utilities.datasetFromFile(outputFileWithPath, copyOfColumnIndicesToRemoveArray);
+		Utilities.buildARFF(outputFileWithPath, arffOutputFileWithPath, movingAverages, trendPeriods, pips);
+		Instances dataset = Utilities.datasetFromFile(arffOutputFileWithPath, copyOfColumnIndicesToRemoveArray);
+//		Instances dataset = Utilities.datasetFromFile(outputFileWithPath, copyOfColumnIndicesToRemoveArray);
 //		Utilities.saveToARFF(dataset, "data/TRAININGSETARFF.arff");
 
 		// Build classifier from dataset
 
 		Classifier classifier = Utilities.buildClassifier(dataset);
 		// clear out entries in instances
-		while (dataset.numInstances() != 0) {
-			dataset.remove(dataset.numInstances() - 1);
-		}
+//		while (dataset.numInstances() != 0) {
+//			dataset.remove(dataset.numInstances() - 1);
+//		}
 //		System.out.println(dataset);
 		ClassifierMaster cmObject = new ClassifierMaster(classifier, columnIndicesToRemoveArray, movingAverages, trendPeriods,
 				pips, OLHC_ColumnNum, dataset, baseCurr,quoteCurr);
@@ -59,7 +60,7 @@ public class Classification {
 		return correct + "% correctly classified instances";
 	}
 
-	public static ArrayList<ArrayList<String>> classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
+	public static ArrayList<ArrayList<String>> classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String arffOutputFileWithPath, String [] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
 			int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr, String newLineStr) {
 		// classify instances from file using classifier
 //		System.out.println("here are the pips"+cmObject.getPips());
@@ -70,16 +71,20 @@ public class Classification {
 		System.arraycopy( columnIndicesToRemoveArray, 0, copyOfColumnIndicesToRemoveArray, 0, columnIndicesToRemoveArray.length );
 
 
-		Instances testset = Utilities.datasetFromFile(testOutputFileWithPath, copyOfColumnIndicesToRemoveArray);
+		
+//		Instances testset = Utilities.datasetFromFile(testOutputFileWithPath, copyOfColumnIndicesToRemoveArray);
+		Utilities.buildARFF(testOutputFileWithPath, arffOutputFileWithPath, movingAverages, trendPeriods, pips);
+		Instances testset = Utilities.datasetFromFile(arffOutputFileWithPath, copyOfColumnIndicesToRemoveArray);
+
 //		Instances dataset = new Instances(cmObject.getInstances());
-		for(int i=0;i<testset.numInstances();i++){
-			dataset.add(testset.get(i));
-		}
+//		for(int i=0;i<testset.numInstances();i++){
+//			dataset.add(testset.get(i));
+//		}
 //		Utilities.saveToARFF(dataset, "data/TESTSETARFF.arff");
 		// Utilities.saveToARFF(testOutputFileWithPath, outfile)
 		ArrayList<ArrayList<String>>results = new ArrayList<ArrayList<String>>();
 		try {
-			results = Utilities.classifyInstances(classifier, dataset, newLineStr);
+			results = Utilities.classifyInstances(classifier, testset, newLineStr);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

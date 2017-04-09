@@ -25,10 +25,10 @@ public class mySBSingleton implements mySBSingletonRemote {
     }
     
     @Override
-	public ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath,
+	public ClassifierMaster createClassificationTree(String inputFileWithPath, String outputFileWithPath,String arffOutputFileWithPath,
 			String[] columnIndicesToRemoveArray, ArrayList<Integer> movingAverages, ArrayList<Integer> trendPeriods, int pips,
 			int OLHC_ColumnNum, String baseCurr, String quoteCurr) {
-		return Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, false,baseCurr, quoteCurr);
+		return Classification.createClassificationTree(inputFileWithPath, outputFileWithPath, arffOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, false,baseCurr, quoteCurr);
 
 		// TODO Auto-generated method stub
 		
@@ -55,8 +55,8 @@ public class mySBSingleton implements mySBSingletonRemote {
 	}
 	
 	@Override
-	public ArrayList<ArrayList<String>> classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath, String []columnIndicesToRemoveArray, ArrayList<Integer> movingAverages,ArrayList<Integer> trendPeriods,int pips, int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr, String newLineStr){
-		return Classification.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,newLineStr);
+	public ArrayList<ArrayList<String>> classifyData(Classifier classifier, String testInputFileWithPath, String testOutputFileWithPath,String arffOutputFileWithPath, String []columnIndicesToRemoveArray, ArrayList<Integer> movingAverages,ArrayList<Integer> trendPeriods,int pips, int OLHC_ColumnNum,Instances dataset, String baseCurr, String quoteCurr, String newLineStr){
+		return Classification.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath,arffOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,newLineStr);
 	}
 
 }

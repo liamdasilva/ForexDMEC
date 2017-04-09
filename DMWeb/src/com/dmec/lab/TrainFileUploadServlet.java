@@ -26,8 +26,6 @@ import org.jboss.logging.Logger.Level;
 
 import com.dmec.forex.ClassifierMaster;
 import com.dmec.forex.mySBSingleton;
-import com.dmec.forex.mySBStateful;
-import com.dmec.forex.mySBStateless;
 
 import weka.classifiers.Classifier;
 
@@ -35,15 +33,12 @@ import weka.classifiers.Classifier;
 @MultipartConfig
 public class TrainFileUploadServlet extends HttpServlet {
     @EJB
-    private mySBStateful sbsf;
-    @EJB
-    private mySBStateless sbsl;
-    @EJB
     private mySBSingleton sbst;
-//    private final static String []removeStringArray=new String[]{"1,3-7"};
+//    private final static String []removeStringArray=new String[]{"1,2-6"};
 	private final static Logger LOGGER = Logger.getLogger(TrainFileUploadServlet.class.getCanonicalName());
 	private final static String TrainingFilesFolderName="TrainingFiles";
 	private final static String PreprocessedTrainingFilesFolderName="PreprocessedTrainingFiles";
+	private final static String ATrFolderName="ArffTrainingFiles";
 
 
 	@SuppressWarnings("deprecation")
@@ -107,7 +102,7 @@ public class TrainFileUploadServlet extends HttpServlet {
 			}else if(strCalculateOn.equals("close")){
 				columnNum=5;
 			}
-			String baseCurr=request.getParameter("baseCurrency");
+			String baseCurr=request.getParameter("f");
 			String quoteCurr=request.getParameter("quoteCurrency");
 			
 			System.out.println(request.getParameter("movingAverages")+
@@ -119,12 +114,12 @@ public class TrainFileUploadServlet extends HttpServlet {
 			String inputFileWithPath=path+File.separator+TrainingFilesFolderName+File.separator+fileName;
 			String outputFileWithPath=path+File.separator+PreprocessedTrainingFilesFolderName+File.separator+fileName;
 			System.out.println(outputFileWithPath);
-			String []removeStringArray = new String[]{"-R","1,3-7"};
+//			String []removeStringArray = new String[]{"-R","2-6"};
 			
 			
 //			sbsf.createClassificationTree(inputFileWithPath, outputFileWithPath, removeStringArray, movingAverages, trendPeriods, pips, columnNum);
-			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath, new String[]{"-R","1,3-7"}, movingAverages, trendPeriods, pips, columnNum,baseCurr, quoteCurr);
-			String evaluation=sbst.evaluateClassifier(classifierMaster.getClassifier(), outputFileWithPath, new String[]{"-R","1,3-7"});
+			ClassifierMaster classifierMaster=sbst.createClassificationTree(inputFileWithPath, outputFileWithPath,path+File.separator+ATrFolderName+File.separator+"temp.arff", new String[]{"-R","2-6"}, movingAverages, trendPeriods, pips, columnNum,baseCurr, quoteCurr);
+			String evaluation=sbst.evaluateClassifier(classifierMaster.getClassifier(), path+File.separator+ATrFolderName+File.separator+"temp.arff", new String[]{"-R","2-6"});
 			sbst.temporarilyStoreClassifierMaster(classifierMaster);
 			request.setAttribute("evaluation", evaluation);
 //			request.setAttribute("temp", Arrays.toString(classifierMaster.getColumnIndicesToRemoveArray()));

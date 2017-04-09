@@ -24,18 +24,13 @@ import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
 import com.dmec.forex.mySBSingleton;
-import com.dmec.forex.mySBStateful;
-import com.dmec.forex.mySBStateless;
 
 import weka.classifiers.Classifier;
 
 @WebServlet("/getObjects")
 @MultipartConfig
 public class getObjectsServlet extends HttpServlet {
-    @EJB
-    private mySBStateful sbsf;
-    @EJB
-    private mySBStateless sbsl;
+   
     @EJB
     private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};

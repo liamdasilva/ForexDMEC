@@ -22,6 +22,7 @@ public class myEJBClient {
     	String userDir = System.getProperty("user.home");
     	String objectsPath = userDir+"/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/Objects/";
     	String pFilesPath = userDir+"/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/PreprocessedTestingFiles/";
+    	String aFilesPath = userDir+"/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/ArffTestingFiles/";
     	File[] files = new File(objectsPath).listFiles();
     	for(File file:files){
     		if (!file.isDirectory()){
@@ -35,7 +36,7 @@ public class myEJBClient {
     	ClassifierMaster cm = myBean.getClassifierMaster(input, objectsPath);
     	System.out.println("Enter the path of the testing file you would like to use:");
     	input = scanner.nextLine();
-    	ArrayList<ArrayList<String>> results = myBean.classifyData(cm.getClassifier(), input, pFilesPath+"pre", cm.getColumnIndicesToRemoveArray(), cm.getMovingAverages(), cm.getTrendPeriods(), cm.getPips(), cm.getOLHC_ColumnNum(), cm.getInstances(), cm.getBaseCurr(), cm.getQuoteCurr(), "");
+    	ArrayList<ArrayList<String>> results = myBean.classifyData(cm.getClassifier(), input, pFilesPath+"pre.csv",aFilesPath+"pre.arff", cm.getColumnIndicesToRemoveArray(), cm.getMovingAverages(), cm.getTrendPeriods(), cm.getPips(), cm.getOLHC_ColumnNum(), cm.getInstances(), cm.getBaseCurr(), cm.getQuoteCurr(), "");
     	
     	System.out.println(results.toString());
         System.out.println("RMI done!");

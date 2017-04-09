@@ -1,6 +1,11 @@
 package com.dmec.forex;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -33,10 +38,19 @@ public class Utilities {
 	 * 
 	 */
 	public static Instances datasetFromFile(String filename, String []removeStringArray){
-		CSVLoader loader = new CSVLoader();
+		
 		try {
-			loader.setSource(new File(filename)); //example of filename: "eurusd60edit2.csv"
-			Instances dataset = loader.getDataSet();
+			Instances dataset;
+			String[] sa = filename.split("\\.");
+			if(sa[sa.length-1].equals("csv")){
+				CSVLoader loader = new CSVLoader();
+				loader.setSource(new File(filename)); //example of filename: "eurusd60edit2.csv"
+				dataset = loader.getDataSet();
+			}else{
+				DataSource source = new DataSource(filename);
+				dataset = source.getDataSet();
+				
+			}
 			
 			//remove columns here
 			if (removeStringArray.length!=0){
@@ -201,4 +215,91 @@ public class Utilities {
 	    long tmp = Math.round(value);
 	    return (double) tmp / factor;
 	}
+	
+public static void buildARFF(String inputFileName, String outputFileName, ArrayList<Integer> movingAverages,ArrayList<Integer> trendPeriods, int pips){
+		
+		BufferedReader br = null;
+		String line = "";
+		FileWriter fw = null;
+		BufferedWriter bw = null;
+		
+		try {
+			
+			br = new BufferedReader(new FileReader(inputFileName));
+			fw = new FileWriter(outputFileName);
+			bw = new BufferedWriter(fw);
+			String relation="@relation "+"TESTING"+"\n";
+			bw.write(relation);
+			bw.write("\n");
+//			String dateAttribute="@attribute Date NUMERIC"+"\n";
+//			bw.write(dateAttribute);
+			String timeAttribute="@attribute Time {0:00,1:00,2:00,3:00,4:00,5:00,6:00,7:00,8:00,9:00,10:00,11:00,12:00,13:00,14:00,15:00,16:00,17:00,18:00,19:00,20:00,21:00,22:00,23:00}"+"\n";
+			bw.write(timeAttribute);
+			String openAttribute="@attribute Open NUMERIC"+"\n";
+			bw.write(openAttribute);
+			String highAttribute="@attribute High NUMERIC"+"\n";
+			bw.write(highAttribute);
+			String lowAttribute="@attribute Low NUMERIC"+"\n";
+			bw.write(lowAttribute);
+			String closeAttribute="@attribute Close NUMERIC"+"\n";
+			bw.write(closeAttribute);
+			String volumeAttribute="@attribute Volume NUMERIC"+"\n";
+			bw.write(volumeAttribute);
+			
+			
+			for(Integer movingAverage:movingAverages){
+				String movingAverageAttribute="@attribute Pos_Rel_To_MA_"+movingAverage+" {ABOVE,BELOW}"+"\n";
+				bw.write(movingAverageAttribute);
+			}
+			
+			for(Integer trendPeriod:trendPeriods){
+				String trendPeriodAttribute="@attribute "+trendPeriod+"_Period_Trend"+" {UPTREND,RANGING,DOWNTREND}"+"\n";
+				bw.write(trendPeriodAttribute);
+			}
+//			bw.write("\n");
+			String candleStickAttribute="@attribute CandleStick_Pattern {NONE,BEARISH_ENGULFING,BULLISH_ENGULFING}"+"\n";
+			bw.write(candleStickAttribute);
+			String classAttribute="@attribute Class_"+pips+"_pips"+" {RANGING,+"+pips+"pips,-"+pips+"pips}"+"\n"; 
+			bw.write(classAttribute);
+			bw.write("\n");
+			String dataAttributeHeader="@data"+"\n";
+			bw.write(dataAttributeHeader);
+//			bw.write("\n");
+				
+			while((line = br.readLine()) != null){
+				bw.write(line+'\n');
+			}
+			
+			
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (bw != null)
+				try {
+					bw.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			if (fw != null)
+				try {
+					fw.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
+	
 }

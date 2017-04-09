@@ -28,9 +28,6 @@ import org.jboss.logging.Logger.Level;
 
 import com.dmec.forex.ClassifierMaster;
 import com.dmec.forex.mySBSingleton;
-import com.dmec.forex.mySBStateful;
-import com.dmec.forex.mySBStatefulRemote;
-import com.dmec.forex.mySBStateless;
 
 import weka.classifiers.Classifier;
 import weka.core.Instances;
@@ -39,17 +36,13 @@ import weka.core.Instances;
 @MultipartConfig
 public class TestFileUploadServlet extends HttpServlet {
     @EJB
-    private mySBStateful sbsf;
-    @EJB
-    private mySBStateless sbsl;
-    @EJB
     private mySBSingleton sbst;
 //    private final static String []removeStringArray=new String[]{"1,3-7"};
 	private final static Logger LOGGER = Logger.getLogger(TestFileUploadServlet.class.getCanonicalName());
 	private final static String TestingFilesFolderName="TestingFiles";
 	private final static String PreprocessedTestingFilesFolderName="PreprocessedTestingFiles";
 	private final static String ObjectsFolderName="Objects";
-
+	private final static String ATeFolderName="ArffTestingFiles";
 
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -100,7 +93,7 @@ public class TestFileUploadServlet extends HttpServlet {
 			String quoteCurr=classifierMaster.getQuoteCurr();
 //			System.out.println(Arrays.toString(columnIndicesToRemoveArray));	
 			String newLineStr="<br>";
-			ArrayList<ArrayList<String>>results=sbst.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,newLineStr);
+			ArrayList<ArrayList<String>>results=sbst.classifyData(classifier, testInputFileWithPath, testOutputFileWithPath,path+File.separator+ATeFolderName+File.separator+"temp.arff", columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr, quoteCurr,newLineStr);
 //			writer.println(Arrays.toString(results.toArray()));
 			
 //			String []removeStringArray = new String[]{"-R","1,3-7"};

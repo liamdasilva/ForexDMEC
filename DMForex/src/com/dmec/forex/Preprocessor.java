@@ -122,18 +122,18 @@ public class Preprocessor {
 			bw = new BufferedWriter(fw);
 			
 			//create column headers
-			String columnHeaders="";
-			columnHeaders+="Date,Time,Open,High,Low,Close,Volume";
-			for (Integer movingAverageVal : movingAverages) {
-				columnHeaders+=",Pos_Rel_To_MA_"+movingAverageVal;
-			}
-
-			for (Integer trendPeriodVal : trendPeriods) {
-				columnHeaders+=","+trendPeriodVal+"_Period_Trend";
-			}
-			columnHeaders+=",CandleStick_Pattern";
-			columnHeaders+=",Class_"+pips+"_pips";
-			bw.write(columnHeaders+'\n');
+//			String columnHeaders="";
+//			columnHeaders+="Date,Time,Open,High,Low,Close,Volume";
+//			for (Integer movingAverageVal : movingAverages) {
+//				columnHeaders+=",Pos_Rel_To_MA_"+movingAverageVal;
+//			}
+//
+//			for (Integer trendPeriodVal : trendPeriods) {
+//				columnHeaders+=","+trendPeriodVal+"_Period_Trend";
+//			}
+//			columnHeaders+=",CandleStick_Pattern";
+//			columnHeaders+=",Class_"+pips+"_pips";
+//			bw.write(columnHeaders+'\n');
 			
 			int rowCounter = 0;
 			ArrayList<String> firstRow=new ArrayList<String>();
@@ -281,6 +281,7 @@ public class Preprocessor {
 				}
 //				bw.write(prevRowClassification + '\n');
 //				bw.write(line);
+				prevRowToWrite=prevRowToWrite.substring(11,prevRowToWrite.length());
 				prevRowToWrite+=prevRowClassification+'\n';
 				bw.write(prevRowToWrite);
 				prevRowToWrite=line;
@@ -289,7 +290,9 @@ public class Preprocessor {
 				prevCandlestickTrend_MA=currentCandlestickTrend_MA;
 			}
 			if(testData){
+				prevRowToWrite=prevRowToWrite.substring(11,prevRowToWrite.length());
 				bw.write(prevRowToWrite+",?");
+				
 			}
 
 		} catch (FileNotFoundException e) {
