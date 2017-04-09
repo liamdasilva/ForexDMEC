@@ -196,7 +196,7 @@ public class Utilities {
 			results.add(rowInResults);
 			
 		}
-		System.out.println((double)counter/(double)testset.numInstances());
+//		System.out.println((double)counter/(double)testset.numInstances());
 		return results;
 	}
 	
