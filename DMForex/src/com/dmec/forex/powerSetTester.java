@@ -38,12 +38,14 @@ public class powerSetTester {
 		ArrayList<Integer> movingAverages=new ArrayList<Integer>();
 		//movingAverages.add(3);
 		//movingAverages.add(5);
-		movingAverages.add(8);
+		movingAverages.add(5);
 		movingAverages.add(10);
+		movingAverages.add(15);
 		movingAverages.add(20);
+		movingAverages.add(24);
 		movingAverages.add(50);
 		movingAverages.add(100);
-		movingAverages.add(200);
+//		movingAverages.add(200);
 
 	
 		
@@ -65,7 +67,10 @@ public class powerSetTester {
  		pipsToTry.add(15);
 		pipsToTry.add(16);
 		pipsToTry.add(17);
+//		pipsToTry.add(18);
+//		pipsToTry.add(19);
 //		pipsToTry.add(20);
+//		pipsToTry.add(21);
 
 //		int pips=24;
 		int columnNum=5;
@@ -84,7 +89,7 @@ public class powerSetTester {
 		list = new ArrayList<Integer>(trendPeriods);
         set = new HashSet<Integer>(list);
 		Set<Set<Integer>> trendPeriodsPowerSet=powerSet(set); 
-		
+		int combinationsTried = 0;
 		for(Set<Integer> movingAverageSet: movingAveragesPowerSet){
 			ArrayList<Integer> tempmovingAverages=new ArrayList<Integer>();
 			for(int movingAverage:movingAverageSet){
@@ -108,6 +113,7 @@ public class powerSetTester {
 					int counter = 0;
 					int correctlyClassifiedNonRangingInstances = 0;
 					int totalNonRangingClassifications = 0;
+					combinationsTried++;
 //					int incorrectlyClassifiedNonRangingInstances = 0;
 //					int nonRangingClassifcationsThatWereRanging = 0;
 					for (int i = 0; i < results.size(); i++) {
@@ -146,11 +152,12 @@ public class powerSetTester {
 				}
 			}
 		}
-		System.out.println(correct + "/" + total);
-		System.out.println(max);
-		System.out.println(OPT_movingAverages);
-		System.out.println(OPT_trendPeriods);
-		System.out.println(OPT_pips);
+		System.out.println("Out of "+combinationsTried+" variable combinations tried, the best is:");
+		System.out.println(correct + "/" + total +" correct trading oppurtunities.");
+		System.out.println(max*100 +"% accurate");
+		System.out.println("Moving Averages: "+OPT_movingAverages);
+		System.out.println("Trend periods: "+OPT_trendPeriods);
+		System.out.println("Pips Class: "+OPT_pips);
 		
 //		
 //		ClassifierMaster cmObject = Classification.createClassificationTree(inputFileWithPath,
