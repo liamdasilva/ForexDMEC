@@ -61,7 +61,7 @@ public class TrainFileUploadServlet extends HttpServlet {
 		OutputStream out = null;
 		InputStream filecontent = null;
 		final PrintWriter writer = response.getWriter();
-
+		
 		try {
 			out = new FileOutputStream(new File(path + File.separator + TrainingFilesFolderName + File.separator + fileName));
 			filecontent = filePart.getInputStream();
