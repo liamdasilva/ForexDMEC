@@ -39,6 +39,8 @@ public class myDMRS {
 	private final static String ObjectsFolderName = "Objects";
 	private final static String TrainingFilesFolderName = "TrainingFiles";
 	private final static String PreprocessedTrainingFilesFolderName = "PreprocessedTrainingFiles";
+	private final static String ATrFolderName = "ArffTrainingFiles";
+	private final static String ATeFolderName="ArffTestingFiles";
 
 	@POST
 	@Path("/uploadTrain")
@@ -51,7 +53,7 @@ public class myDMRS {
 		System.out.println("===============");
 		System.out.println(uploadForm.keySet());
 		System.out.println("===============");
-		String path = "C:";
+		String path = "/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/";
 		String TrainingFilesFolderName = "input";
 		String PreprocessedTrainingFilesFolderName = "output";
 		
@@ -160,9 +162,10 @@ public class myDMRS {
 		System.out.println("=======================================================================================");
 
 		ClassifierMaster classifierMaster = sbst.createClassificationTree(inputFileWithPath, outputFileWithPath,
-				new String[] { "-R", "1,3-7" }, movingAverages, trendPeriods, pips, columnNum, baseCurr, quoteCurr);
-		String evaluation = sbst.evaluateClassifier(classifierMaster.getClassifier(), outputFileWithPath,
-				new String[] { "-R", "1,3-7" });
+				path + File.separator + ATrFolderName + File.separator + "temp.arff", new String[] { "-R", "2-6" },
+				movingAverages, trendPeriods, pips, columnNum, baseCurr, quoteCurr);
+		String evaluation = sbst.evaluateClassifier(classifierMaster.getClassifier(),
+				path + File.separator + ATrFolderName + File.separator + "temp.arff", new String[] { "-R", "2-6" });
 		sbst.temporarilyStoreClassifierMaster(classifierMaster);
 
 		URI uri = UriBuilder.fromPath("../confirmClassifier.jsp").queryParam("evaluation", evaluation).build();
@@ -210,7 +213,7 @@ public class myDMRS {
 		System.out.println("===============");
 		System.out.println(uploadForm.keySet());
 		System.out.println("===============");
-		String path = "C:";
+		String path = "/Documents/enterprise/wildfly-10.1.0.Final/standalone/deployments/myEAR.ear/DMWeb.war/WEB-INF/";
 		String TrainingFilesFolderName = "input";
 		String PreprocessedTrainingFilesFolderName = "output";
 		String fileName = "";
@@ -272,8 +275,9 @@ public class myDMRS {
 		// System.out.println(Arrays.toString(columnIndicesToRemoveArray));
 		String newLineStr = "<br>";
 		ArrayList<ArrayList<String>> results = sbst.classifyData(classifier, testInputFileWithPath,
-				testOutputFileWithPath, columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum,
-				dataset, baseCurr, quoteCurr, newLineStr);
+				testOutputFileWithPath, path + File.separator + ATeFolderName + File.separator + "temp.arff",
+				columnIndicesToRemoveArray, movingAverages, trendPeriods, pips, OLHC_ColumnNum, dataset, baseCurr,
+				quoteCurr, newLineStr);
 		// writer.println(Arrays.toString(results.toArray())); }
 		String returnHTML = "<html><head><title>Results</title>"
 				+ "<link rel='stylesheet' type='text/css' href='style.css'>"
