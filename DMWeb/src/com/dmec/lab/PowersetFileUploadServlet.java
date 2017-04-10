@@ -36,18 +36,16 @@ import weka.classifiers.Classifier;
 @WebServlet("/uploadPowerset")
 @MultipartConfig
 public class PowersetFileUploadServlet extends HttpServlet {
-    @EJB
-    private mySBSingleton sbst;
-//    private final static String []removeStringArray=new String[]{"1,2-6"};
+	@EJB
+	private mySBSingleton sbst;
+	// private final static String []removeStringArray=new String[]{"1,2-6"};
 	private final static Logger LOGGER = Logger.getLogger(PowersetFileUploadServlet.class.getCanonicalName());
-	private final static String TrainingFilesFolderName="TrainingFiles";
-	private final static String TestingFilesFolderName="TestingFiles";
-	private final static String PreprocessedTrainingFilesFolderName="PreprocessedTrainingFiles";
-	private final static String PreprocessedTestingFilesFolderName="PreprocessedTestingFiles";
-	private final static String ATrFolderName="ArffTrainingFiles";
-	private final static String ATeFolderName="ArffTestingFiles";
-	
-
+	private final static String TrainingFilesFolderName = "TrainingFiles";
+	private final static String TestingFilesFolderName = "TestingFiles";
+	private final static String PreprocessedTrainingFilesFolderName = "PreprocessedTrainingFiles";
+	private final static String PreprocessedTestingFilesFolderName = "PreprocessedTestingFiles";
+	private final static String ATrFolderName = "ArffTrainingFiles";
+	private final static String ATeFolderName = "ArffTestingFiles";
 
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -65,16 +63,17 @@ public class PowersetFileUploadServlet extends HttpServlet {
 		trFileName = filenameList[filenameList.length - 1];
 		filenameList = teFileName.split("\\\\");
 		teFileName = filenameList[filenameList.length - 1];
-		
+
 		OutputStream out = null;
 		InputStream filecontent = null;
 		final PrintWriter writer = response.getWriter();
-		
+
 		try {
-			
-			//Write training file
-//			------------------------------------------------------------------------------------------------------------
-			out = new FileOutputStream(new File(path + File.separator + TrainingFilesFolderName + File.separator + trFileName));
+
+			// Write training file
+			// ------------------------------------------------------------------------------------------------------------
+			out = new FileOutputStream(
+					new File(path + File.separator + TrainingFilesFolderName + File.separator + trFileName));
 			filecontent = trFilePart.getInputStream();
 
 			int read = 0;
@@ -86,11 +85,12 @@ public class PowersetFileUploadServlet extends HttpServlet {
 			writer.println("New file " + trFileName + " created at " + path + File.separator + TrainingFilesFolderName);
 			LOGGER.log(Level.INFO, "File {0} being uploaded to {1} ",
 					new Object[] { trFileName, path + File.separator + TrainingFilesFolderName });
-//			------------------------------------------------------------------------------------------------------------
-			
-			//Write testing file
-//			------------------------------------------------------------------------------------------------------------
-			out = new FileOutputStream(new File(path + File.separator + TestingFilesFolderName + File.separator + teFileName));
+			// ------------------------------------------------------------------------------------------------------------
+
+			// Write testing file
+			// ------------------------------------------------------------------------------------------------------------
+			out = new FileOutputStream(
+					new File(path + File.separator + TestingFilesFolderName + File.separator + teFileName));
 			filecontent = teFilePart.getInputStream();
 
 			read = 0;
@@ -102,55 +102,57 @@ public class PowersetFileUploadServlet extends HttpServlet {
 			writer.println("New file " + teFileName + " created at " + path + File.separator + TestingFilesFolderName);
 			LOGGER.log(Level.INFO, "File {0} being uploaded to {1} ",
 					new Object[] { teFileName, path + File.separator + TestingFilesFolderName });
-//			------------------------------------------------------------------------------------------------------------
-			
-			String inputFileWithPath=path+File.separator+TrainingFilesFolderName+File.separator+trFileName;
-			String outputFileWithPath=path+File.separator+PreprocessedTrainingFilesFolderName+File.separator+trFileName;
-			String trainingARFF= path+File.separator+ATrFolderName+File.separator+"train.arff";
-			String testInputFileWithPath = path+File.separator+TestingFilesFolderName+File.separator+teFileName;
-			String testOutputFileWithPath = path+File.separator+PreprocessedTestingFilesFolderName+File.separator+teFileName;
-			String testingARFF= path+File.separator+ATeFolderName+File.separator+"test.arff";
-			
-			//CALL THE CLASSIFICATION
-			String[] strMovingAveragesArray=request.getParameter("movingAverages").split(",");
-			ArrayList<Integer> movingAverages=new ArrayList<Integer>();
-			if(!request.getParameter("movingAverages").equals("")){
-				for(String movingAverage: strMovingAveragesArray){
+			// ------------------------------------------------------------------------------------------------------------
+
+			String inputFileWithPath = path + File.separator + TrainingFilesFolderName + File.separator + trFileName;
+			String outputFileWithPath = path + File.separator + PreprocessedTrainingFilesFolderName + File.separator
+					+ trFileName;
+			String trainingARFF = path + File.separator + ATrFolderName + File.separator + "train.arff";
+			String testInputFileWithPath = path + File.separator + TestingFilesFolderName + File.separator + teFileName;
+			String testOutputFileWithPath = path + File.separator + PreprocessedTestingFilesFolderName + File.separator
+					+ teFileName;
+			String testingARFF = path + File.separator + ATeFolderName + File.separator + "test.arff";
+
+			// CALL THE CLASSIFICATION
+			String[] strMovingAveragesArray = request.getParameter("movingAverages").split(",");
+			ArrayList<Integer> movingAverages = new ArrayList<Integer>();
+			if (!request.getParameter("movingAverages").equals("")) {
+				for (String movingAverage : strMovingAveragesArray) {
 					movingAverages.add(Integer.parseInt(movingAverage));
 				}
 			}
-			
-			
-			String[] strtrendPeriodsArray=request.getParameter("trendPeriods").split(",");
-			ArrayList<Integer> trendPeriods=new ArrayList<Integer>();
-			if(!request.getParameter("trendPeriods").equals("")){
-				for(String trendPeriod: strtrendPeriodsArray){
+
+			String[] strtrendPeriodsArray = request.getParameter("trendPeriods").split(",");
+			ArrayList<Integer> trendPeriods = new ArrayList<Integer>();
+			if (!request.getParameter("trendPeriods").equals("")) {
+				for (String trendPeriod : strtrendPeriodsArray) {
 					trendPeriods.add(Integer.parseInt(trendPeriod));
 				}
 			}
-			
+
 			String[] pipsArray = request.getParameter("Pips").split(",");
-			ArrayList<Integer> pipsToTry=new ArrayList<Integer>();
-			if(!request.getParameter("Pips").equals("")){
-				for(String pip: pipsArray){
+			ArrayList<Integer> pipsToTry = new ArrayList<Integer>();
+			if (!request.getParameter("Pips").equals("")) {
+				for (String pip : pipsArray) {
 					pipsToTry.add(Integer.parseInt(pip));
 				}
 			}
-			
-			String strCalculateOn=request.getParameter("calculateOn");
-			int columnNum=0;
-			if(strCalculateOn.equals("open")){
-				columnNum=2;
-			}else if(strCalculateOn.equals("high")){
-				columnNum=3;
-			}else if(strCalculateOn.equals("low")){
-				columnNum=4;
-			}else if(strCalculateOn.equals("close")){
-				columnNum=5;
+
+			String strCalculateOn = request.getParameter("calculateOn");
+			int columnNum = 0;
+			if (strCalculateOn.equals("open")) {
+				columnNum = 2;
+			} else if (strCalculateOn.equals("high")) {
+				columnNum = 3;
+			} else if (strCalculateOn.equals("low")) {
+				columnNum = 4;
+			} else if (strCalculateOn.equals("close")) {
+				columnNum = 5;
 			}
-			String baseCurr=request.getParameter("baseCurrency");
-			String quoteCurr=request.getParameter("quoteCurrency");
-			
+			String baseCurr = request.getParameter("baseCurrency");
+			String quoteCurr = request.getParameter("quoteCurrency");
+			int threshold = Integer.parseInt(request.getParameter("minTrades"));
+
 			double percent = 0.0;
 			double max = 0.0;
 			ArrayList<Integer> OPT_movingAverages = new ArrayList<Integer>();
@@ -158,42 +160,43 @@ public class PowersetFileUploadServlet extends HttpServlet {
 			int OPT_pips = 0;
 			int correct = 0;
 			int total = 0;
-			ClassifierMaster OPT_ClassifierMaster=null;
-			
+			ClassifierMaster OPT_ClassifierMaster = null;
+
 			List<Integer> list = new ArrayList<Integer>(movingAverages);
-	        Set<Integer> set = new HashSet<Integer>(list);
-			Set<Set<Integer>> movingAveragesPowerSet=powerSet(set);
-			
+			Set<Integer> set = new HashSet<Integer>(list);
+			Set<Set<Integer>> movingAveragesPowerSet = powerSet(set);
+
 			list = new ArrayList<Integer>(trendPeriods);
-	        set = new HashSet<Integer>(list);
-			Set<Set<Integer>> trendPeriodsPowerSet=powerSet(set); 
+			set = new HashSet<Integer>(list);
+			Set<Set<Integer>> trendPeriodsPowerSet = powerSet(set);
 			int combinationsTried = 0;
-			for(Set<Integer> movingAverageSet: movingAveragesPowerSet){
-				ArrayList<Integer> tempmovingAverages=new ArrayList<Integer>();
-				for(int movingAverage:movingAverageSet){
+			for (Set<Integer> movingAverageSet : movingAveragesPowerSet) {
+				ArrayList<Integer> tempmovingAverages = new ArrayList<Integer>();
+				for (int movingAverage : movingAverageSet) {
 					tempmovingAverages.add(movingAverage);
 				}
-				for(Set<Integer> trendPeriodSet: trendPeriodsPowerSet){
-					ArrayList<Integer> tempTrendPeriods=new ArrayList<Integer>();
-					for(int trendPeriod:trendPeriodSet){
+				for (Set<Integer> trendPeriodSet : trendPeriodsPowerSet) {
+					ArrayList<Integer> tempTrendPeriods = new ArrayList<Integer>();
+					for (int trendPeriod : trendPeriodSet) {
 						tempTrendPeriods.add(trendPeriod);
 					}
-					for(Integer p: pipsToTry){
-						int pips=p;
-						
+					for (Integer p : pipsToTry) {
+						int pips = p;
+
 						ClassifierMaster cmObject = Classification.createClassificationTree(inputFileWithPath,
-								outputFileWithPath, trainingARFF, new String[] { "-R", "2-6" }, tempmovingAverages, tempTrendPeriods, pips,
-								columnNum, false, baseCurr, quoteCurr);
+								outputFileWithPath, trainingARFF, new String[] { "-R", "2-6" }, tempmovingAverages,
+								tempTrendPeriods, pips, columnNum, false, baseCurr, quoteCurr);
 						ArrayList<ArrayList<String>> results = Classification.classifyData(cmObject.getClassifier(),
-								testInputFileWithPath, testOutputFileWithPath, testingARFF, new String[] { "-R", "2-6" }, cmObject.getMovingAverages(),
-								cmObject.getTrendPeriods(), cmObject.getPips(), cmObject.getOLHC_ColumnNum(), cmObject.getInstances(), baseCurr, quoteCurr,
-								"\n");
+								testInputFileWithPath, testOutputFileWithPath, testingARFF,
+								new String[] { "-R", "2-6" }, cmObject.getMovingAverages(), cmObject.getTrendPeriods(),
+								cmObject.getPips(), cmObject.getOLHC_ColumnNum(), cmObject.getInstances(), baseCurr,
+								quoteCurr, "\n");
 						int counter = 0;
 						int correctlyClassifiedNonRangingInstances = 0;
 						int totalNonRangingClassifications = 0;
 						combinationsTried++;
-//						int incorrectlyClassifiedNonRangingInstances = 0;
-//						int nonRangingClassifcationsThatWereRanging = 0;
+						// int incorrectlyClassifiedNonRangingInstances = 0;
+						// int nonRangingClassifcationsThatWereRanging = 0;
 						for (int i = 0; i < results.size(); i++) {
 							/* out.println("<tr>"); */
 							if (results.get(i).get(0).equals(results.get(i).get(1))) {
@@ -204,15 +207,15 @@ public class PowersetFileUploadServlet extends HttpServlet {
 								if (results.get(i).get(0).equals(results.get(i).get(1))) {
 									correctlyClassifiedNonRangingInstances++;
 								}
-								
+
 								totalNonRangingClassifications++;
 							}
 						}
-//						System.out.println("Yeah");
+						// System.out.println("Yeah");
 						percent = (double) correctlyClassifiedNonRangingInstances
 								/ (double) (totalNonRangingClassifications);
-						if (percent > max) {
-							OPT_ClassifierMaster=cmObject;
+						if (percent > max && threshold <= totalNonRangingClassifications) {
+							OPT_ClassifierMaster = cmObject;
 							correct = correctlyClassifiedNonRangingInstances;
 							total = totalNonRangingClassifications;
 							OPT_movingAverages = cmObject.getMovingAverages();
@@ -224,32 +227,35 @@ public class PowersetFileUploadServlet extends HttpServlet {
 							System.out.println(OPT_movingAverages);
 							System.out.println(OPT_trendPeriods);
 							System.out.println(OPT_pips);
-							
-							
+
 						}
-						
+
 					}
 				}
 			}
-			
-			System.out.println("Out of "+combinationsTried+" variable combinations tried, the best is:");
-			System.out.println(correct + "/" + total +" correct trading opportunities.");
-			System.out.println(max*100 +"% accurate");
-			System.out.println("Moving Averages: "+OPT_movingAverages);
-			System.out.println("Trend periods: "+OPT_trendPeriods);
-			System.out.println("Pips Class: "+OPT_pips);
 
-//			String evaluation=sbst.evaluateClassifier(OPT_ClassifierMaster.getClassifier(), path+File.separator+ATrFolderName+File.separator+"temp.arff", new String[]{"-R","2-6"});
+			System.out.println("Out of " + combinationsTried + " variable combinations tried, the best is:");
+			System.out.println(correct + "/" + total + " correct trading opportunities.");
+			System.out.println(max * 100 + "% accurate");
+			System.out.println("Moving Averages: " + OPT_movingAverages);
+			System.out.println("Trend periods: " + OPT_trendPeriods);
+			System.out.println("Pips Class: " + OPT_pips);
+
+			// String
+			// evaluation=sbst.evaluateClassifier(OPT_ClassifierMaster.getClassifier(),
+			// path+File.separator+ATrFolderName+File.separator+"temp.arff", new
+			// String[]{"-R","2-6"});
 			sbst.temporarilyStoreClassifierMaster(OPT_ClassifierMaster);
-			request.setAttribute("combinationsTried",combinationsTried);
-			request.setAttribute("numCorrect",correct);
-			request.setAttribute("numTotal",total);
+			request.setAttribute("combinationsTried", combinationsTried);
+			request.setAttribute("numCorrect", correct);
+			request.setAttribute("numTotal", total);
 			request.setAttribute("cmObject", OPT_ClassifierMaster);
-//			request.setAttribute("evaluation", evaluation);
-//			request.setAttribute("temp", Arrays.toString(classifierMaster.getColumnIndicesToRemoveArray()));
-			RequestDispatcher rd=request.getRequestDispatcher("powersetResults.jsp");
+			// request.setAttribute("evaluation", evaluation);
+			// request.setAttribute("temp",
+			// Arrays.toString(classifierMaster.getColumnIndicesToRemoveArray()));
+			RequestDispatcher rd = request.getRequestDispatcher("powersetResults.jsp");
 			rd.forward(request, response);
-						
+
 		} catch (FileNotFoundException fne) {
 			writer.println("You either did not specify a file to upload or are "
 					+ "trying to upload a file to a protected or nonexistent " + "location.");
@@ -267,9 +273,8 @@ public class PowersetFileUploadServlet extends HttpServlet {
 				writer.close();
 			}
 		}
-		
-	}
 
+	}
 
 	private String getFileName(final Part part) {
 		final String partHeader = part.getHeader("content-disposition");
@@ -281,23 +286,23 @@ public class PowersetFileUploadServlet extends HttpServlet {
 		}
 		return null;
 	}
-	
+
 	public static Set<Set<Integer>> powerSet(Set<Integer> originalSet) {
-        Set<Set<Integer>> sets = new HashSet<Set<Integer>>();
-        if (originalSet.isEmpty()) {
-            sets.add(new HashSet<Integer>());
-            return sets;
-        }
-        List<Integer> list = new ArrayList<Integer>(originalSet);
-        Integer head = list.get(0);
-        Set<Integer> rest = new HashSet<Integer>(list.subList(1, list.size()));
-        for (Set<Integer> set : powerSet(rest)) {
-            Set<Integer> newSet = new HashSet<Integer>();
-            newSet.add(head);
-            newSet.addAll(set);
-            sets.add(newSet);
-            sets.add(set);
-        }
-        return sets;
-    }
+		Set<Set<Integer>> sets = new HashSet<Set<Integer>>();
+		if (originalSet.isEmpty()) {
+			sets.add(new HashSet<Integer>());
+			return sets;
+		}
+		List<Integer> list = new ArrayList<Integer>(originalSet);
+		Integer head = list.get(0);
+		Set<Integer> rest = new HashSet<Integer>(list.subList(1, list.size()));
+		for (Set<Integer> set : powerSet(rest)) {
+			Set<Integer> newSet = new HashSet<Integer>();
+			newSet.add(head);
+			newSet.addAll(set);
+			sets.add(newSet);
+			sets.add(set);
+		}
+		return sets;
+	}
 }
