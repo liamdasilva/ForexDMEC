@@ -148,7 +148,7 @@ public class PowersetFileUploadServlet extends HttpServlet {
 			}else if(strCalculateOn.equals("close")){
 				columnNum=5;
 			}
-			String baseCurr=request.getParameter("f");
+			String baseCurr=request.getParameter("baseCurrency");
 			String quoteCurr=request.getParameter("quoteCurrency");
 			
 			double percent = 0.0;
@@ -183,10 +183,10 @@ public class PowersetFileUploadServlet extends HttpServlet {
 						
 						ClassifierMaster cmObject = Classification.createClassificationTree(inputFileWithPath,
 								outputFileWithPath, trainingARFF, new String[] { "-R", "2-6" }, tempmovingAverages, tempTrendPeriods, pips,
-								columnNum, false, "EUR", "EUR");
+								columnNum, false, baseCurr, quoteCurr);
 						ArrayList<ArrayList<String>> results = Classification.classifyData(cmObject.getClassifier(),
 								testInputFileWithPath, testOutputFileWithPath, testingARFF, new String[] { "-R", "2-6" }, cmObject.getMovingAverages(),
-								cmObject.getTrendPeriods(), cmObject.getPips(), cmObject.getOLHC_ColumnNum(), cmObject.getInstances(), "EUR", "EUR",
+								cmObject.getTrendPeriods(), cmObject.getPips(), cmObject.getOLHC_ColumnNum(), cmObject.getInstances(), baseCurr, quoteCurr,
 								"\n");
 						int counter = 0;
 						int correctlyClassifiedNonRangingInstances = 0;

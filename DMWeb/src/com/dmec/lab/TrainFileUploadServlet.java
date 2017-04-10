@@ -102,7 +102,7 @@ public class TrainFileUploadServlet extends HttpServlet {
 			}else if(strCalculateOn.equals("close")){
 				columnNum=5;
 			}
-			String baseCurr=request.getParameter("f");
+			String baseCurr=request.getParameter("baseCurrency");
 			String quoteCurr=request.getParameter("quoteCurrency");
 			
 			System.out.println(request.getParameter("movingAverages")+
