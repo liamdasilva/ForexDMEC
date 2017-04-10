@@ -36,15 +36,15 @@ public class powerSetTester {
 		String trainingARFF= userDir+"/desktop/training and testing files/training.arff";
 		
 		ArrayList<Integer> movingAverages=new ArrayList<Integer>();
-		//movingAverages.add(3);
-		//movingAverages.add(5);
+		movingAverages.add(3);
+		movingAverages.add(5);
 		movingAverages.add(5);
 		movingAverages.add(10);
-		movingAverages.add(15);
+//		movingAverages.add(15);
 		movingAverages.add(20);
-		movingAverages.add(24);
-		movingAverages.add(50);
-		movingAverages.add(100);
+//		movingAverages.add(24);
+//		movingAverages.add(50);
+//		movingAverages.add(100);
 //		movingAverages.add(200);
 
 	
@@ -53,7 +53,7 @@ public class powerSetTester {
 		trendPeriods.add(3);
 		trendPeriods.add(4);
 		trendPeriods.add(5);
-		trendPeriods.add(6);
+//		trendPeriods.add(6);
 //		trendPeriods.add(20);
 
 		
@@ -61,12 +61,12 @@ public class powerSetTester {
 		ArrayList<Integer> pipsToTry=new ArrayList<Integer>();
 		pipsToTry.add(10);
 		pipsToTry.add(11);
-		pipsToTry.add(12);
-		pipsToTry.add(13);
-		pipsToTry.add(14);
- 		pipsToTry.add(15);
-		pipsToTry.add(16);
-		pipsToTry.add(17);
+//		pipsToTry.add(12);
+//		pipsToTry.add(13);
+//		pipsToTry.add(14);
+// 		pipsToTry.add(15);
+//		pipsToTry.add(16);
+//		pipsToTry.add(17);
 //		pipsToTry.add(18);
 //		pipsToTry.add(19);
 //		pipsToTry.add(20);
